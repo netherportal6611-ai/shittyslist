@@ -999,6 +999,101 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 1.5rem calc(260px 
   padding:1px 5px;
 }
 @media(max-width:860px){.kb-hint{left:1rem;}}
+
+/* ══ GLOBAL LISTS ══ */
+.gl-wrap{padding:1.2rem 1.5rem;margin-left:260px;}
+@media(max-width:860px){.gl-wrap{margin-left:0;}}
+
+/* header row */
+.gl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:.8rem;}
+.gl-title{font-size:22px;font-weight:700;letter-spacing:.06em;}
+.gl-title span{color:var(--accent);}
+.gl-new-btn{background:var(--accent);color:#06030f;border:none;border-radius:9px;padding:9px 18px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:.06em;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s,transform .15s;}
+.gl-new-btn:hover{background:var(--accent2);transform:translateY(-1px);}
+
+/* list grid */
+.gl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;}
+
+/* list card */
+.gl-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color .18s,transform .18s,box-shadow .18s;animation:cardIn .28s cubic-bezier(.22,.68,0,1.2) both;}
+.gl-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 6px 28px rgba(0,0,0,.3);}
+.gl-card-cover{position:relative;width:100%;padding-bottom:46%;background:var(--bg3);overflow:hidden;}
+.gl-card-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .3s;}
+.gl-card:hover .gl-card-cover img{transform:scale(1.05);}
+.gl-card-cover-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.5rem;opacity:.18;}
+.gl-card-lock{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:3px 7px;font-size:10px;color:var(--mu);font-weight:700;letter-spacing:.06em;}
+.gl-card-body{padding:.75rem 1rem;}
+.gl-card-name{font-size:15px;font-weight:700;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:.3rem;}
+.gl-card-desc{font-size:11px;color:var(--mu);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:.5rem;}
+.gl-card-meta{display:flex;align-items:center;justify-content:space-between;font-size:10px;color:var(--mu2);}
+.gl-card-meta strong{color:var(--tx);font-weight:600;}
+.gl-card-joined{background:var(--acd);border:1px solid rgba(128,200,255,.2);color:var(--accent);border-radius:5px;padding:2px 7px;font-size:9px;font-weight:700;letter-spacing:.08em;}
+
+/* empty state */
+.gl-empty{text-align:center;padding:4rem 1rem;color:var(--mu);}
+.gl-empty-icon{font-size:3rem;margin-bottom:.8rem;opacity:.4;}
+
+/* ── Individual list view ── */
+.gl-view{display:none;padding:1.2rem 1.5rem;margin-left:260px;}
+.gl-view.active{display:block;}
+@media(max-width:860px){.gl-view{margin-left:0;}}
+
+.gl-view-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:1.2rem;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:1rem 1.2rem;overflow:hidden;position:relative;}
+.gl-view-cover{width:80px;height:80px;border-radius:10px;object-fit:cover;flex-shrink:0;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:2rem;overflow:hidden;}
+.gl-view-cover img{width:100%;height:100%;object-fit:cover;}
+.gl-view-info{flex:1;min-width:0;}
+.gl-view-name{font-size:20px;font-weight:700;letter-spacing:.06em;margin-bottom:.3rem;}
+.gl-view-desc{font-size:12px;color:var(--mu);line-height:1.55;margin-bottom:.5rem;}
+.gl-view-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.gl-view-meta span{font-size:10px;color:var(--mu2);}
+.gl-view-meta strong{color:var(--tx);}
+.gl-view-actions{display:flex;gap:7px;flex-shrink:0;align-self:flex-start;}
+.gl-back-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:7px 13px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--mu);cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;}
+.gl-back-btn:hover{border-color:var(--accent);color:var(--accent);}
+.gl-join-btn{background:var(--accent);color:#06030f;border:none;border-radius:8px;padding:7px 15px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:.06em;cursor:pointer;transition:background .15s;white-space:nowrap;}
+.gl-join-btn:hover{background:var(--accent2);}
+.gl-join-btn.joined{background:var(--bg3);border:1px solid var(--border2);color:var(--mu);}
+
+/* sub-tabs */
+.gl-tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-bottom:1rem;}
+.gl-tab{background:transparent;border:none;color:var(--mu);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;letter-spacing:.06em;padding:10px 16px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s,border-color .15s;}
+.gl-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+/* levels list inside a global list */
+.gl-level-item{background:var(--bg2);border:1px solid var(--border);border-radius:11px;display:flex;align-items:center;gap:10px;padding:.6rem .9rem;margin-bottom:5px;transition:border-color .15s;}
+.gl-level-item:hover{border-color:var(--border2);}
+.gl-level-rank{font-size:16px;font-weight:700;font-family:Share Tech Mono,monospace;color:var(--mu);width:32px;text-align:center;flex-shrink:0;}
+.gl-level-thumb{width:56px;height:38px;border-radius:7px;object-fit:cover;background:var(--bg3);flex-shrink:0;overflow:hidden;}
+.gl-level-thumb img{width:100%;height:100%;object-fit:cover;}
+.gl-level-info{flex:1;min-width:0;}
+.gl-level-name{font-size:13px;font-weight:700;letter-spacing:.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.gl-level-meta{display:flex;gap:5px;align-items:center;margin-top:2px;flex-wrap:wrap;}
+.gl-level-del{background:transparent;border:1px solid rgba(224,80,80,.25);color:var(--ce);border-radius:6px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;flex-shrink:0;transition:background .15s;}
+.gl-level-del:hover{background:rgba(224,80,80,.15);}
+
+/* add level btn */
+.gl-add-level-btn{background:var(--acd);border:1px dashed rgba(128,200,255,.3);border-radius:10px;width:100%;padding:10px;color:var(--accent);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:.06em;cursor:pointer;text-align:center;transition:background .15s;margin-top:4px;}
+.gl-add-level-btn:hover{background:rgba(128,200,255,.15);}
+
+/* suggestions in global list */
+.gl-sug-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.6rem .9rem;margin-bottom:5px;display:flex;align-items:center;gap:8px;}
+.gl-sug-info{flex:1;min-width:0;}
+.gl-sug-name{font-size:13px;font-weight:700;}
+.gl-sug-meta{font-size:10px;color:var(--mu);margin-top:2px;}
+.gl-sug-actions{display:flex;gap:5px;}
+.gl-sug-ok{background:rgba(80,176,80,.15);border:1px solid rgba(80,176,80,.3);color:#50d090;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Rajdhani',sans-serif;transition:background .15s;}
+.gl-sug-ok:hover{background:rgba(80,176,80,.25);}
+.gl-sug-rej{background:rgba(224,80,80,.1);border:1px solid rgba(224,80,80,.25);color:var(--ce);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Rajdhani',sans-serif;transition:background .15s;}
+.gl-sug-rej:hover{background:rgba(224,80,80,.2);}
+
+/* create/edit modal */
+.gl-modal-field{margin-bottom:.8rem;}
+.gl-modal-field label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--mu);font-weight:700;margin-bottom:5px;}
+.gl-modal-field input,.gl-modal-field textarea{width:100%;background:var(--bg3);border:1.5px solid var(--border2);border-radius:8px;color:var(--tx);font-family:'Rajdhani',sans-serif;font-size:14px;padding:9px 11px;outline:none;box-sizing:border-box;transition:border-color .15s;}
+.gl-modal-field input:focus,.gl-modal-field textarea:focus{border-color:var(--accent);}
+.gl-modal-field textarea{resize:vertical;min-height:60px;}
+.gl-cover-preview{width:100%;height:100px;border-radius:8px;object-fit:cover;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--mu2);font-size:12px;margin-bottom:.5rem;overflow:hidden;}
+.gl-cover-preview img{width:100%;height:100%;object-fit:cover;}
 </style>
 </head>
 <body>
@@ -1130,6 +1225,7 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 1.5rem calc(260px 
     <button class="tab-btn"        id="tab-history"     onclick="switchTab('history')">Historial</button>
     <button class="tab-btn"        id="tab-stats"       onclick="switchTab('stats')">Stats</button>
     <button class="tab-btn"        id="tab-gallery"     onclick="switchTab('gallery')">🖼 Galería</button>
+    <button class="tab-btn"        id="tab-globallists"  onclick="switchTab('globallists')">🌐 Global Lists</button>
     <button class="tab-btn"        id="tab-torneos"     onclick="switchTab('torneos')">🏆 Torneos</button>
     <button class="tab-btn"        id="tab-profile"     onclick="switchTab('profile')" style="display:none">Mi perfil</button>
   </div>
@@ -1800,6 +1896,7 @@ function switchTab(name){
   if(name==='profile')renderProfile();
   if(name==='history')renderHistory();
   if(name==='stats')renderStats();
+  if(name==='globallists')initGlobalLists();
   var um=document.getElementById('user-menu');if(um)um.classList.remove('open');
 }
 
@@ -3812,6 +3909,445 @@ function restoreLastCard() {
   }, 900);
 }
 
+
+/* ══ GLOBAL LISTS ══ */
+var glRef = db.ref('globalLists');
+var _glCache = {};         // listId -> meta+members+levels+suggestions
+var _glCurrentId = null;   // currently open list
+var _glCurrentTab = 'levels';
+var _glEditMode = false;
+var _glVerifyTimer = null;
+var _glSugVerifyTimer = null;
+
+// ── helpers ──────────────────────────────────────────────────────────────────
+function glHash(str){
+  var h=5381;for(var i=0;i<str.length;i++)h=((h<<5)+h)+str.charCodeAt(i);
+  return(h>>>0).toString(36);
+}
+function glIsOwner(listId){
+  var meta=_glCache[listId]&&_glCache[listId].meta;
+  return cUser&&meta&&meta.creatorUid===cUser.uid;
+}
+function glIsMember(listId){
+  var members=_glCache[listId]&&_glCache[listId].members||{};
+  return cUser&&(members[cUser.uid]||glIsOwner(listId));
+}
+function glCanManage(listId){
+  return isAdmin||glIsOwner(listId);
+}
+
+// ── init ─────────────────────────────────────────────────────────────────────
+function initGlobalLists(){
+  glRef.on('value',function(snap){
+    _glCache={};
+    if(snap.val())snap.forEach(function(c){_glCache[c.key]=c.val();});
+    if(_glCurrentId)glRenderView(_glCurrentId);
+    else glRenderBrowse();
+  });
+  // Show create btn if logged in
+  var btn=document.getElementById('gl-new-btn');
+  if(btn)btn.style.display=cUser?'flex':'none';
+}
+
+// ── browse ────────────────────────────────────────────────────────────────────
+function glRenderBrowse(){
+  var browse=document.getElementById('gl-browse');
+  var view=document.getElementById('gl-view');
+  if(browse)browse.style.display='block';
+  if(view)view.style.display='none';
+  _glCurrentId=null;
+  var btn=document.getElementById('gl-new-btn');
+  if(btn)btn.style.display=cUser?'flex':'none';
+  var grid=document.getElementById('gl-grid');
+  if(!grid)return;
+  var lists=Object.entries(_glCache).sort(function(a,b){return(b[1].meta&&b[1].meta.createdAt||0)-(a[1].meta&&a[1].meta.createdAt||0);});
+  if(!lists.length){
+    grid.innerHTML='<div class="gl-empty"><div class="gl-empty-icon">🌐</div><p>No hay listas todavía. ¡Creá la primera!</p></div>';
+    return;
+  }
+  grid.innerHTML=lists.map(function(e){
+    var id=e[0],d=e[1];
+    var meta=d.meta||{};
+    var members=d.members||{};
+    var levels=d.levels||{};
+    var memberCount=Object.keys(members).length;
+    var levelCount=Object.keys(levels).length;
+    var joined=cUser&&members[cUser.uid];
+    var isPrivate=meta.private;
+    var coverHtml=meta.photo
+      ?'<img src="'+ea(meta.photo)+'" alt="">'
+      :'<div class="gl-card-cover-empty">🌐</div>';
+    return'<div class="gl-card" onclick="glOpenList(\''+ea(id)+'\')">'+
+      '<div class="gl-card-cover">'+coverHtml+(isPrivate?'<div class="gl-card-lock">🔒 PRIVADA</div>':'')+
+      '</div>'+
+      '<div class="gl-card-body">'+
+        '<div class="gl-card-name">'+esc(meta.name||'Sin nombre')+'</div>'+
+        '<div class="gl-card-desc">'+(meta.desc?esc(meta.desc):'<span style="opacity:.5">Sin descripción</span>')+'</div>'+
+        '<div class="gl-card-meta">'+
+          '<span>por <strong>'+esc(meta.creatorName||'?')+'</strong> · '+levelCount+' niveles · '+memberCount+' miembros</span>'+
+          (joined?'<span class="gl-card-joined">MIEMBRO</span>':'')+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+// ── open list ─────────────────────────────────────────────────────────────────
+function glOpenList(listId){
+  var d=_glCache[listId];
+  if(!d||!d.meta)return;
+  var meta=d.meta;
+  // If private and not member/owner/admin → ask password
+  if(meta.private&&!glIsMember(listId)&&!isAdmin){
+    if(!cUser){showAuth();return;}
+    document.getElementById('ov-gl-join').classList.add('open');
+    document.getElementById('gl-join-pass').value='';
+    document.getElementById('gl-join-err').textContent='';
+    document.getElementById('ov-gl-join').dataset.listid=listId;
+    return;
+  }
+  glRenderView(listId);
+}
+
+function glSubmitJoin(){
+  var listId=document.getElementById('ov-gl-join').dataset.listid;
+  var pass=document.getElementById('gl-join-pass').value;
+  var err=document.getElementById('gl-join-err');
+  var meta=_glCache[listId]&&_glCache[listId].meta;
+  if(!meta)return;
+  if(glHash(pass)!==meta.passHash){err.textContent='Contraseña incorrecta.';return;}
+  // Join
+  document.getElementById('ov-gl-join').classList.remove('open');
+  glJoin(listId,function(){glRenderView(listId);});
+}
+
+function glRenderView(listId){
+  _glCurrentId=listId;
+  var browse=document.getElementById('gl-browse');
+  var view=document.getElementById('gl-view');
+  if(browse)browse.style.display='none';
+  if(view)view.style.display='block';
+  var d=_glCache[listId]||{};
+  var meta=d.meta||{};
+  var members=d.members||{};
+  // Cover
+  var coverEl=document.getElementById('gl-view-cover');
+  if(coverEl){coverEl.innerHTML=meta.photo?'<img src="'+ea(meta.photo)+'" alt="">':'🌐';}
+  // Info
+  var nameEl=document.getElementById('gl-view-name');if(nameEl)nameEl.textContent=meta.name||'Sin nombre';
+  var descEl=document.getElementById('gl-view-desc');if(descEl)descEl.textContent=meta.desc||'';
+  var metaEl=document.getElementById('gl-view-meta');
+  if(metaEl){
+    var mc=Object.keys(members).length;
+    var lc=Object.keys(d.levels||{}).length;
+    metaEl.innerHTML='<span>por <strong>'+esc(meta.creatorName||'?')+'</strong></span>'+
+      '<span>'+lc+' niveles</span><span>'+mc+' miembros</span>'+
+      (meta.private?'<span>🔒 Privada</span>':'<span>🌐 Pública</span>');
+  }
+  // Join btn
+  var joinBtn=document.getElementById('gl-join-btn');
+  if(joinBtn){
+    var isMember=cUser&&members[cUser.uid];
+    var isOwner=glIsOwner(listId);
+    joinBtn.style.display=cUser&&!isOwner?'block':'none';
+    joinBtn.textContent=isMember?'Salir':'Unirse';
+    joinBtn.className='gl-join-btn'+(isMember?' joined':'');
+  }
+  // Edit/delete btns
+  var editBtn=document.getElementById('gl-edit-btn');
+  var delBtn=document.getElementById('gl-delete-list-btn');
+  if(editBtn)editBtn.style.display=glCanManage(listId)?'block':'none';
+  if(delBtn)delBtn.style.display=glCanManage(listId)?'block':'none';
+  // Render current subtab
+  glSwitchTab(_glCurrentTab);
+}
+
+// ── sub tabs ──────────────────────────────────────────────────────────────────
+function glSwitchTab(tab){
+  _glCurrentTab=tab;
+  document.querySelectorAll('.gl-tab').forEach(function(b){b.classList.remove('active');});
+  var tb=document.getElementById('glt-'+tab);if(tb)tb.classList.add('active');
+  document.getElementById('gl-levels-panel').style.display=tab==='levels'?'block':'none';
+  document.getElementById('gl-sugg-panel').style.display=tab==='suggestions'?'block':'none';
+  if(tab==='levels')glRenderLevels();
+  else glRenderSuggestions();
+}
+
+// ── levels ────────────────────────────────────────────────────────────────────
+function glRenderLevels(){
+  var el=document.getElementById('gl-levels-panel');if(!el)return;
+  var d=_glCache[_glCurrentId]||{};
+  var levels=d.levels||{};
+  var arr=Object.entries(levels).sort(function(a,b){return(a[1].rank||0)-(b[1].rank||0);});
+  var canManage=glCanManage(_glCurrentId);
+  var isMember=glIsMember(_glCurrentId);
+  var html='';
+  if(!arr.length){
+    html='<div style="text-align:center;padding:2rem;color:var(--mu);font-size:13px">Sin niveles aún.</div>';
+  } else {
+    html=arr.map(function(e,i){
+      var key=e[0],lv=e[1];
+      var thumbHtml=lv.img
+        ?'<div class="gl-level-thumb"><img src="'+ea(lv.img)+'" alt=""></div>'
+        :'<div class="gl-level-thumb" style="display:flex;align-items:center;justify-content:center;opacity:.3;font-size:16px">🎮</div>';
+      var delBtn=canManage
+        ?'<button class="gl-level-del" onclick="glDeleteLevel(\''+ea(key)+'\',event)">✕</button>'
+        :'';
+      return'<div class="gl-level-item">'+
+        '<div class="gl-level-rank">'+(lv.rank||i+1)+'</div>'+
+        thumbHtml+
+        '<div class="gl-level-info">'+
+          '<div class="gl-level-name">'+esc(lv.name||'Sin nombre')+'</div>'+
+          '<div class="gl-level-meta">'+
+            (lv.diff?'<span class="badge-diff '+dc(lv.diff)+'">'+esc(lv.diff)+'</span>':'')+
+            (lv.ver?'<span style="font-size:10px;color:var(--mu)">'+esc(lv.ver)+'</span>':'')+
+          '</div>'+
+        '</div>'+
+        delBtn+
+      '</div>';
+    }).join('');
+  }
+  if(canManage){
+    html+='<button class="gl-add-level-btn" onclick="glOpenAddLevel()">+ Agregar nivel</button>';
+  } else if(isMember&&cUser){
+    html+='<button class="gl-add-level-btn" onclick="glSwitchTab(\'suggestions\')" style="margin-top:8px">💡 Sugerir un nivel</button>';
+  }
+  el.innerHTML=html;
+}
+
+// ── add level ─────────────────────────────────────────────────────────────────
+function glOpenAddLevel(){
+  ['gl-l-name','gl-l-id','gl-l-ver'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('gl-l-diff').value='';
+  document.getElementById('gl-l-verify').textContent='';
+  document.getElementById('ov-gl-addlevel').classList.add('open');
+}
+function glCloseAddLevel(){document.getElementById('ov-gl-addlevel').classList.remove('open');}
+function glVerifyLevel(){
+  clearTimeout(_glVerifyTimer);
+  var id=(document.getElementById('gl-l-id').value||'').trim();
+  var fb=document.getElementById('gl-l-verify');
+  if(!id||!/^\d+$/.test(id)){fb.textContent='';fb.className='gdb-verify';return;}
+  fb.textContent='Buscando...';fb.className='gdb-verify loading';
+  _glVerifyTimer=setTimeout(function(){
+    fetch('https://gdbrowser.com/api/level/'+id)
+      .then(function(r){return r.ok?r.json():null;})
+      .then(function(data){
+        if(!data||data.error){fb.textContent='No encontrado.';fb.className='gdb-verify err';return;}
+        fb.textContent='Encontrado: '+data.name+' por '+data.author;fb.className='gdb-verify ok';
+        var nameEl=document.getElementById('gl-l-name');
+        if(nameEl&&!nameEl.value.trim())nameEl.value=data.name;
+        var verEl=document.getElementById('gl-l-ver');
+        if(verEl&&!verEl.value.trim())verEl.value=data.author;
+      }).catch(function(){fb.textContent='Sin conexión a GDBrowser.';fb.className='gdb-verify err';});
+  },600);
+}
+function glSubmitAddLevel(){
+  if(!glCanManage(_glCurrentId))return;
+  var name=(document.getElementById('gl-l-name').value||'').trim();
+  var id=(document.getElementById('gl-l-id').value||'').trim();
+  var diff=document.getElementById('gl-l-diff').value;
+  var ver=(document.getElementById('gl-l-ver').value||'').trim();
+  if(!name){toast('Ingresá un nombre','error');return;}
+  var d=_glCache[_glCurrentId]||{};
+  var levels=d.levels||{};
+  var rank=Object.keys(levels).length+1;
+  var key='lv'+Date.now();
+  glRef.child(_glCurrentId+'/levels/'+key).set({rank:rank,name:name,id:id,diff:diff,ver:ver,ts:Date.now()})
+    .then(function(){glCloseAddLevel();toast('Nivel agregado');});
+}
+function glDeleteLevel(key,ev){
+  ev.stopPropagation();
+  if(!glCanManage(_glCurrentId))return;
+  openDlg({title:'Eliminar nivel',msg:'¿Seguro?',type:'confirm',cb:function(){
+    glRef.child(_glCurrentId+'/levels/'+key).remove().then(function(){toast('Nivel eliminado');});
+  }});
+}
+
+// ── suggestions ───────────────────────────────────────────────────────────────
+function glRenderSuggestions(){
+  var el=document.getElementById('gl-sugg-panel');if(!el)return;
+  var d=_glCache[_glCurrentId]||{};
+  var suggs=d.suggestions||{};
+  var canManage=glCanManage(_glCurrentId);
+  var isMember=glIsMember(_glCurrentId);
+  var arr=Object.entries(suggs).sort(function(a,b){return(b[1].ts||0)-(a[1].ts||0);});
+  var pending=arr.filter(function(e){return e[1].status==='pending';});
+  var html='';
+  if(!pending.length){
+    html='<div style="text-align:center;padding:2rem;color:var(--mu);font-size:13px">Sin sugerencias pendientes.</div>';
+  } else {
+    html=pending.map(function(e){
+      var key=e[0],s=e[1];
+      var actions=canManage
+        ?'<div class="gl-sug-actions">'+
+          '<button class="gl-sug-ok" onclick="glReviewSug(\''+ea(key)+'\',\'approved\',event)">✓</button>'+
+          '<button class="gl-sug-rej" onclick="glReviewSug(\''+ea(key)+'\',\'rejected\',event)">✕</button>'+
+        '</div>'
+        :'';
+      return'<div class="gl-sug-item">'+
+        '<div class="gl-sug-info">'+
+          '<div class="gl-sug-name">'+esc(s.name||'Sin nombre')+'</div>'+
+          '<div class="gl-sug-meta">'+
+            (s.diff?'<span class="badge-diff '+dc(s.diff)+'" style="font-size:8px">'+esc(s.diff)+'</span> ':'')+'por '+esc(s.username||'Anónimo')+
+          '</div>'+
+        '</div>'+
+        actions+
+      '</div>';
+    }).join('');
+  }
+  if(isMember&&cUser){
+    html+='<button class="gl-add-level-btn" onclick="glOpenSuggest()" style="margin-top:8px">+ Sugerir nivel</button>';
+  }
+  el.innerHTML=html;
+}
+function glReviewSug(key,status,ev){
+  ev.stopPropagation();
+  if(!glCanManage(_glCurrentId))return;
+  var sug=_glCache[_glCurrentId]&&_glCache[_glCurrentId].suggestions&&_glCache[_glCurrentId].suggestions[key];
+  if(!sug)return;
+  if(status==='approved'){
+    var d=_glCache[_glCurrentId]||{};
+    var rank=Object.keys(d.levels||{}).length+1;
+    var lvKey='lv'+Date.now();
+    glRef.child(_glCurrentId+'/levels/'+lvKey).set({rank:rank,name:sug.name,id:sug.id||'',diff:sug.diff||'',ver:'',ts:Date.now()});
+  }
+  glRef.child(_glCurrentId+'/suggestions/'+key+'/status').set(status)
+    .then(function(){toast(status==='approved'?'Sugerencia aprobada':'Sugerencia rechazada');});
+}
+
+// ── suggest ───────────────────────────────────────────────────────────────────
+function glOpenSuggest(){
+  if(!cUser){showAuth();return;}
+  if(isBanned()){toast('Cuenta baneada','error');return;}
+  ['gl-s-name','gl-s-id'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('gl-s-diff').value='';
+  document.getElementById('gl-s-verify').textContent='';
+  document.getElementById('ov-gl-suggest').classList.add('open');
+}
+function glCloseSuggest(){document.getElementById('ov-gl-suggest').classList.remove('open');}
+function glVerifySugLevel(){
+  clearTimeout(_glSugVerifyTimer);
+  var id=(document.getElementById('gl-s-id').value||'').trim();
+  var fb=document.getElementById('gl-s-verify');
+  if(!id||!/^\d+$/.test(id)){fb.textContent='';fb.className='gdb-verify';return;}
+  fb.textContent='Buscando...';fb.className='gdb-verify loading';
+  _glSugVerifyTimer=setTimeout(function(){
+    fetch('https://gdbrowser.com/api/level/'+id)
+      .then(function(r){return r.ok?r.json():null;})
+      .then(function(data){
+        if(!data||data.error){fb.textContent='No encontrado.';fb.className='gdb-verify err';return;}
+        fb.textContent='Encontrado: '+data.name;fb.className='gdb-verify ok';
+        var n=document.getElementById('gl-s-name');if(n&&!n.value.trim())n.value=data.name;
+      }).catch(function(){fb.textContent='Sin conexión.';fb.className='gdb-verify err';});
+  },600);
+}
+function glSubmitSuggest(){
+  if(!cUser||!glIsMember(_glCurrentId))return;
+  var name=(document.getElementById('gl-s-name').value||'').trim();
+  var id=(document.getElementById('gl-s-id').value||'').trim();
+  var diff=document.getElementById('gl-s-diff').value;
+  if(!name){toast('Ingresá un nombre','error');return;}
+  var key='sg'+Date.now();
+  glRef.child(_glCurrentId+'/suggestions/'+key).set({
+    name:name,id:id,diff:diff,
+    uid:cUser.uid,username:cUD&&cUD.username||'Anónimo',
+    ts:Date.now(),status:'pending'
+  }).then(function(){glCloseSuggest();toast('Sugerencia enviada');});
+}
+
+// ── join/leave ─────────────────────────────────────────────────────────────────
+function glToggleJoin(){
+  if(!cUser){showAuth();return;}
+  var members=_glCache[_glCurrentId]&&_glCache[_glCurrentId].members||{};
+  if(members[cUser.uid]){
+    glRef.child(_glCurrentId+'/members/'+cUser.uid).remove()
+      .then(function(){toast('Saliste de la lista');});
+  } else {
+    glJoin(_glCurrentId,function(){toast('Te uniste a la lista');});
+  }
+}
+function glJoin(listId,cb){
+  if(!cUser)return;
+  glRef.child(listId+'/members/'+cUser.uid).set(true).then(cb||function(){});
+}
+
+// ── back ──────────────────────────────────────────────────────────────────────
+function glBack(){
+  _glCurrentId=null;
+  _glCurrentTab='levels';
+  document.getElementById('gl-browse').style.display='block';
+  document.getElementById('gl-view').style.display='none';
+}
+
+// ── create ────────────────────────────────────────────────────────────────────
+function glOpenCreate(){
+  if(!cUser){showAuth();return;}
+  _glEditMode=false;
+  document.getElementById('gl-modal-title').textContent='Crear lista';
+  ['gl-m-name','gl-m-desc','gl-m-photo','gl-m-pass'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('gl-cover-preview').innerHTML='<span>Sin foto</span>';
+  document.getElementById('ov-gl-create').classList.add('open');
+}
+function glCloseCreate(){document.getElementById('ov-gl-create').classList.remove('open');}
+function glPreviewCover(){
+  var url=(document.getElementById('gl-m-photo').value||'').trim();
+  var prev=document.getElementById('gl-cover-preview');
+  if(!prev)return;
+  prev.innerHTML=url?'<img src="'+ea(url)+'" alt="" style="width:100%;height:100%;object-fit:cover">':'<span>Sin foto</span>';
+}
+function glSubmitCreate(){
+  if(!cUser)return;
+  var name=(document.getElementById('gl-m-name').value||'').trim();
+  if(!name){toast('Ingresá un nombre','error');return;}
+  var desc=(document.getElementById('gl-m-desc').value||'').trim();
+  var photo=(document.getElementById('gl-m-photo').value||'').trim();
+  var pass=(document.getElementById('gl-m-pass').value||'').trim();
+  var isPrivate=pass.length>0;
+  var meta={
+    name:name,desc:desc,photo:photo,
+    creatorUid:cUser.uid,
+    creatorName:cUD&&cUD.username||cUser.displayName||'Anónimo',
+    private:isPrivate,
+    passHash:isPrivate?glHash(pass):'',
+    createdAt:Date.now()
+  };
+  if(_glEditMode&&_glCurrentId){
+    glRef.child(_glCurrentId+'/meta').update(meta)
+      .then(function(){glCloseCreate();toast('Lista actualizada');glRenderView(_glCurrentId);});
+  } else {
+    var newRef=glRef.push();
+    newRef.set({meta:meta,members:{},levels:{},suggestions:{}})
+      .then(function(){
+        glCloseCreate();toast('Lista creada');
+        glRef.child(newRef.key+'/members/'+cUser.uid).set(true);
+      });
+  }
+}
+
+// ── edit list ─────────────────────────────────────────────────────────────────
+function glOpenEdit(){
+  if(!glCanManage(_glCurrentId))return;
+  _glEditMode=true;
+  var meta=_glCache[_glCurrentId]&&_glCache[_glCurrentId].meta||{};
+  document.getElementById('gl-modal-title').textContent='Editar lista';
+  document.getElementById('gl-m-name').value=meta.name||'';
+  document.getElementById('gl-m-desc').value=meta.desc||'';
+  document.getElementById('gl-m-photo').value=meta.photo||'';
+  document.getElementById('gl-m-pass').value='';
+  glPreviewCover();
+  document.getElementById('ov-gl-create').classList.add('open');
+}
+
+// ── delete list ───────────────────────────────────────────────────────────────
+function glDeleteList(){
+  if(!glCanManage(_glCurrentId))return;
+  openDlg({title:'Eliminar lista',msg:'¿Eliminar esta lista y todo su contenido? No se puede deshacer.',type:'confirm',cb:function(){
+    glRef.child(_glCurrentId).remove().then(function(){glBack();toast('Lista eliminada');});
+  }});
+}
+
+
 ['ov-add','ov-victor','ov-suggest','ov-announce','ov-player-profile','ov-torneo'].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});});
 document.getElementById('ov-username-change').addEventListener('click',function(e){if(e.target===this)closeUsernameChange();});
 document.getElementById('ov-torneo-submit').addEventListener('click',function(e){if(e.target===this)closeTorneoSubmit();});
@@ -3821,6 +4357,7 @@ document.addEventListener('keydown',function(e){
   if(e.key==='Escape'){
     ['ov-add','ov-victor','ov-suggest','ov-announce','ov-player-profile','ov-beat','ov-torneo'].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.remove('open');});
     closeUsernameChange();closeDlg();closeIM();hideAuth();closeGSearch();closeTorneoSubmit();closeFeaturedAdmin();document.getElementById('ov-featured').classList.remove('open');document.getElementById('ov-rules').classList.remove('open');
+    ['ov-gl-create','ov-gl-addlevel','ov-gl-suggest','ov-gl-join'].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.remove('open');});
   }
 });
 </script>
@@ -3871,6 +4408,156 @@ document.addEventListener('keydown',function(e){
     <input id="goto-inp" type="number" min="1" placeholder="Ej: 5"
       onkeydown="gotoKeyDown(event)" oninput="gotoPreview(this.value)">
     <div id="goto-hint" style="min-height:16px"></div>
+  </div>
+</div>
+
+
+<!-- GLOBAL LISTS PAGE -->
+<div class="tab-page" id="page-globallists">
+  <div class="gl-wrap" id="gl-browse">
+    <div class="gl-header">
+      <div class="gl-title">🌐 <span>Global</span> Lists</div>
+      <button class="gl-new-btn" id="gl-new-btn" onclick="glOpenCreate()" style="display:none">+ Crear lista</button>
+    </div>
+    <div class="gl-grid" id="gl-grid">
+      <div class="gl-empty"><div class="gl-empty-icon">🌐</div><p>Cargando listas...</p></div>
+    </div>
+  </div>
+  <!-- Individual list view (hidden until user clicks a list) -->
+  <div id="gl-view" style="display:none;padding:1.2rem 1.5rem;margin-left:260px;">
+    <div class="gl-view-header">
+      <div class="gl-view-cover" id="gl-view-cover">🌐</div>
+      <div class="gl-view-info">
+        <div class="gl-view-name" id="gl-view-name"></div>
+        <div class="gl-view-desc" id="gl-view-desc"></div>
+        <div class="gl-view-meta" id="gl-view-meta"></div>
+      </div>
+      <div class="gl-view-actions">
+        <button class="gl-back-btn" onclick="glBack()">← Volver</button>
+        <button class="gl-join-btn" id="gl-join-btn" onclick="glToggleJoin()">Unirse</button>
+        <button class="gl-join-btn" id="gl-edit-btn" onclick="glOpenEdit()" style="display:none;background:var(--bg3);border:1px solid var(--border2);color:var(--tx)">✎ Editar</button>
+        <button class="gl-join-btn" id="gl-delete-list-btn" onclick="glDeleteList()" style="display:none;background:rgba(224,80,80,.15);border:1px solid rgba(224,80,80,.3);color:var(--ce)">Eliminar</button>
+      </div>
+    </div>
+    <div class="gl-tabs">
+      <button class="gl-tab active" id="glt-levels" onclick="glSwitchTab('levels')">Niveles</button>
+      <button class="gl-tab" id="glt-suggestions" onclick="glSwitchTab('suggestions')">Sugerencias</button>
+    </div>
+    <div id="gl-levels-panel"></div>
+    <div id="gl-sugg-panel" style="display:none"></div>
+  </div>
+</div>
+
+<!-- GL CREATE/EDIT MODAL -->
+<div class="dlgov" id="ov-gl-create">
+  <div class="dlgbox" style="width:min(460px,100%)">
+    <h3 id="gl-modal-title" style="margin-bottom:1rem">Crear lista</h3>
+    <div class="gl-modal-field">
+      <label>Nombre de la lista</label>
+      <input id="gl-m-name" placeholder="Mi lista épica..." maxlength="40">
+    </div>
+    <div class="gl-modal-field">
+      <label>Descripción</label>
+      <textarea id="gl-m-desc" placeholder="Describí tu lista..." maxlength="200"></textarea>
+    </div>
+    <div class="gl-modal-field">
+      <label>Foto de portada (URL de imagen)</label>
+      <input id="gl-m-photo" placeholder="https://..." oninput="glPreviewCover()">
+      <div class="gl-cover-preview" id="gl-cover-preview"><span>Sin foto</span></div>
+    </div>
+    <div class="gl-modal-field">
+      <label>Contraseña (dejá vacío para lista pública)</label>
+      <input id="gl-m-pass" type="password" placeholder="Contraseña opcional...">
+    </div>
+    <div class="dlgact">
+      <button class="dlgcancel" onclick="glCloseCreate()">Cancelar</button>
+      <button class="dlgok" onclick="glSubmitCreate()">Crear</button>
+    </div>
+  </div>
+</div>
+
+<!-- GL ADD LEVEL MODAL -->
+<div class="dlgov" id="ov-gl-addlevel">
+  <div class="dlgbox" style="width:min(420px,100%)">
+    <h3 style="margin-bottom:1rem">Agregar nivel</h3>
+    <div class="gl-modal-field">
+      <label>Nombre del nivel</label>
+      <input id="gl-l-name" placeholder="Nombre...">
+    </div>
+    <div class="gl-modal-field">
+      <label>ID de GD</label>
+      <input id="gl-l-id" placeholder="ID numérico..." oninput="glVerifyLevel()">
+      <div class="gdb-verify" id="gl-l-verify"></div>
+    </div>
+    <div class="gl-modal-field">
+      <label>Dificultad</label>
+      <select id="gl-l-diff" style="width:100%;background:var(--bg3);border:1.5px solid var(--border2);border-radius:8px;color:var(--tx);font-family:'Rajdhani',sans-serif;font-size:14px;padding:9px 11px;outline:none;">
+        <option value="">Sin asignar</option>
+        <option value="Easy Demon">Easy Demon</option>
+        <option value="Medium Demon">Medium Demon</option>
+        <option value="Hard Demon">Hard Demon</option>
+        <option value="Insane Demon">Insane Demon</option>
+        <option value="Extreme Demon">Extreme Demon</option>
+        <option value="Insane">Insane</option>
+      </select>
+    </div>
+    <div class="gl-modal-field">
+      <label>Verificador</label>
+      <input id="gl-l-ver" placeholder="Nombre del verificador...">
+    </div>
+    <div class="dlgact">
+      <button class="dlgcancel" onclick="glCloseAddLevel()">Cancelar</button>
+      <button class="dlgok" onclick="glSubmitAddLevel()">Agregar</button>
+    </div>
+  </div>
+</div>
+
+<!-- GL SUGGEST MODAL -->
+<div class="dlgov" id="ov-gl-suggest">
+  <div class="dlgbox" style="width:min(420px,100%)">
+    <h3 style="margin-bottom:1rem">Sugerir nivel</h3>
+    <div class="gl-modal-field">
+      <label>Nombre del nivel</label>
+      <input id="gl-s-name" placeholder="Nombre...">
+    </div>
+    <div class="gl-modal-field">
+      <label>ID de GD</label>
+      <input id="gl-s-id" placeholder="ID numérico..." oninput="glVerifySugLevel()">
+      <div class="gdb-verify" id="gl-s-verify"></div>
+    </div>
+    <div class="gl-modal-field">
+      <label>Dificultad sugerida</label>
+      <select id="gl-s-diff" style="width:100%;background:var(--bg3);border:1.5px solid var(--border2);border-radius:8px;color:var(--tx);font-family:'Rajdhani',sans-serif;font-size:14px;padding:9px 11px;outline:none;">
+        <option value="">Sin asignar</option>
+        <option value="Easy Demon">Easy Demon</option>
+        <option value="Medium Demon">Medium Demon</option>
+        <option value="Hard Demon">Hard Demon</option>
+        <option value="Insane Demon">Insane Demon</option>
+        <option value="Extreme Demon">Extreme Demon</option>
+        <option value="Insane">Insane</option>
+      </select>
+    </div>
+    <div class="dlgact">
+      <button class="dlgcancel" onclick="glCloseSuggest()">Cancelar</button>
+      <button class="dlgok" onclick="glSubmitSuggest()">Sugerir</button>
+    </div>
+  </div>
+</div>
+
+<!-- GL JOIN PRIVATE MODAL -->
+<div class="dlgov" id="ov-gl-join">
+  <div class="dlgbox" style="width:min(380px,100%)">
+    <h3 style="margin-bottom:.8rem">Lista privada 🔒</h3>
+    <p style="font-size:12px;color:var(--mu);margin-bottom:1rem">Esta lista requiere contraseña para unirse.</p>
+    <div class="gl-modal-field">
+      <label>Contraseña</label>
+      <input id="gl-join-pass" type="password" placeholder="Contraseña..." onkeydown="if(event.key==='Enter')glSubmitJoin()">
+      <div class="auth-err" id="gl-join-err" style="margin-top:5px"></div>
+    </div>
+    <div class="dlgact">
+      <button class="dlgcancel" onclick="document.getElementById('ov-gl-join').classList.remove('open')">Cancelar</button>
+      <button class="dlgok" onclick="glSubmitJoin()">Entrar</button>
+    </div>
   </div>
 </div>
 
