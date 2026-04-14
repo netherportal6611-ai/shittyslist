@@ -4083,29 +4083,9 @@ function glRenderLevels(){
   var isMember=glIsMember(_glCurrentId);
   var html='';
   if(!arr.length){
-    html='<div style="text-align:center;padding:2rem;color:var(--mu);font-size:13px">Sin niveles aún.</div>';
+    html='<div style="text-align:center;padding:2.5rem;color:var(--mu);font-size:13px">Sin niveles aún.</div>';
   } else {
-    html=arr.map(function(e,i){
-      var key=e[0],lv=e[1];
-      var thumbHtml=lv.img
-        ?'<div class="gl-level-thumb"><img src="'+ea(lv.img)+'" alt=""></div>'
-        :'<div class="gl-level-thumb" style="display:flex;align-items:center;justify-content:center;opacity:.3;font-size:16px">🎮</div>';
-      var delBtn=canManage
-        ?'<button class="gl-level-del" onclick="glDeleteLevel(\''+ea(key)+'\',event)">✕</button>'
-        :'';
-      return'<div class="gl-level-item">'+
-        '<div class="gl-level-rank">'+(lv.rank||i+1)+'</div>'+
-        thumbHtml+
-        '<div class="gl-level-info">'+
-          '<div class="gl-level-name">'+esc(lv.name||'Sin nombre')+'</div>'+
-          '<div class="gl-level-meta">'+
-            (lv.diff?'<span class="badge-diff '+dc(lv.diff)+'">'+esc(lv.diff)+'</span>':'')+
-            (lv.ver?'<span style="font-size:10px;color:var(--mu)">'+esc(lv.ver)+'</span>':'')+
-          '</div>'+
-        '</div>'+
-        delBtn+
-      '</div>';
-    }).join('');
+    html=arr.map(function(e){return buildGLCard(e[1],e[0]);}).join('');
   }
   if(canManage){
     html+='<button class="gl-add-level-btn" onclick="glOpenAddLevel()">+ Agregar nivel</button>';
@@ -4114,12 +4094,13 @@ function glRenderLevels(){
   }
   el.innerHTML=html;
 }
-
-// ── add level ─────────────────────────────────────────────────────────────────
 function glOpenAddLevel(){
-  ['gl-l-name','gl-l-id','gl-l-ver'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  if(!glCanManage(_glCurrentId))return;
+  ['gl-l-name','gl-l-id','gl-l-ver','gl-l-creator','gl-l-atts','gl-l-video'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.value='';
+  });
   document.getElementById('gl-l-diff').value='';
-  document.getElementById('gl-l-verify').textContent='';
+  var vEl=document.getElementById('gl-l-verify');if(vEl){vEl.textContent='';vEl.className='gdb-verify';}
   document.getElementById('ov-gl-addlevel').classList.add('open');
 }
 function glCloseAddLevel(){document.getElementById('ov-gl-addlevel').classList.remove('open');}
@@ -4144,17 +4125,20 @@ function glVerifyLevel(){
 }
 function glSubmitAddLevel(){
   if(!glCanManage(_glCurrentId))return;
-  var name=(document.getElementById('gl-l-name').value||'').trim();
-  var id=(document.getElementById('gl-l-id').value||'').trim();
-  var diff=document.getElementById('gl-l-diff').value;
-  var ver=(document.getElementById('gl-l-ver').value||'').trim();
+  var name    = (document.getElementById('gl-l-name').value||'').trim();
+  var id      = (document.getElementById('gl-l-id').value||'').trim();
+  var diff    = document.getElementById('gl-l-diff').value;
+  var ver     = (document.getElementById('gl-l-ver').value||'').trim();
+  var creator = (document.getElementById('gl-l-creator')&&document.getElementById('gl-l-creator').value||'').trim();
+  var atts    = (document.getElementById('gl-l-atts')&&document.getElementById('gl-l-atts').value||'').trim();
+  var video   = (document.getElementById('gl-l-video')&&document.getElementById('gl-l-video').value||'').trim();
   if(!name){toast('Ingresá un nombre','error');return;}
-  var d=_glCache[_glCurrentId]||{};
-  var levels=d.levels||{};
-  var rank=Object.keys(levels).length+1;
-  var key='lv'+Date.now();
-  glRef.child(_glCurrentId+'/levels/'+key).set({rank:rank,name:name,id:id,diff:diff,ver:ver,ts:Date.now()})
-    .then(function(){glCloseAddLevel();toast('Nivel agregado');});
+  var lvls = _glCache[_glCurrentId]&&_glCache[_glCurrentId].levels||{};
+  var rank = Object.keys(lvls).length+1;
+  var key = 'lv'+Date.now();
+  glRef.child(_glCurrentId+'/levels/'+key).set({
+    rank:rank,name:name,id:id,diff:diff,ver:ver,creator:creator,atts:atts,video:video,ts:Date.now()
+  }).then(function(){glCloseAddLevel();toast('Nivel agregado');});
 }
 function glDeleteLevel(key,ev){
   ev.stopPropagation();
@@ -4348,6 +4332,121 @@ function glDeleteList(){
 }
 
 
+function buildGLCard(lv, key){
+  var emp = !lv.name;
+  var d = {
+    rank: lv.rank||1, name: lv.name||'', id: lv.id||'', diff: lv.diff||'',
+    ver: lv.ver||'', creator: lv.creator||'', atts: lv.atts||'',
+    img: lv.img||'', video: lv.video||'', accent: lv.accent||''
+  };
+  var db2 = d.diff
+    ? '<span class="badge-diff '+dc(d.diff)+'">'+esc(d.diff)+'</span>'
+    : '<span class="badge-diff d-no">Sin asignar</span>';
+  var idb = d.id ? '<span class="badge-id">#'+esc(d.id)+'</span>' : '';
+  var ab  = d.atts ? '<span class="badge-atts">'+esc(d.atts)+' ATTs</span>' : '';
+  var diffBar = d.diff ? '<div class="diff-bar-wrap"><div class="diff-bar" style="'+diffBarStyle(d.diff)+'"></div></div>' : '';
+  var canManage = glCanManage(_glCurrentId);
+
+  var ti = d.img
+    ? '<div class="card-thumb-inner"><img src="'+ea(d.img)+'" alt="'+ea(d.name||'')+'"></div>'
+    : '<div class="card-thumb-inner"><div class="card-thumb-empty"><svg width="34" height="23" viewBox="0 0 64 44" fill="none" opacity=".4"><rect x="1" y="1" width="62" height="42" rx="4" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="22" r="7" stroke="currentColor" stroke-width="2"/><path d="M1 31l14-10 10 8 10-12 28 14" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div></div>';
+
+  // ── Detail panels (compact, no beateos/progress/sparkline) ──
+  var infoPanel =
+    '<div class="det-panel">'+
+      '<div class="det-panel-title">Info</div>'+
+      '<div class="det-kv">'+
+        (d.id   ? '<div class="det-row"><span class="det-k">ID</span><span class="det-v mono">'+esc(d.id)+'</span></div>' : '')+
+        (d.ver  ? '<div class="det-row"><span class="det-k">Verificador</span><span class="det-v">'+esc(d.ver)+'</span></div>' : '')+
+        (d.creator && d.creator!==d.ver ? '<div class="det-row"><span class="det-k">Creador</span><span class="det-v">'+esc(d.creator)+'</span></div>' : '')+
+        (d.atts ? '<div class="det-row"><span class="det-k">ATTs</span><span class="det-v mono accent">'+esc(d.atts)+'</span></div>' : '')+
+        '<div class="det-row"><span class="det-k">Rank</span><span class="det-v mono">#'+d.rank+'</span></div>'+
+      '</div>'+
+    '</div>';
+
+  // Video
+  var ytId = d.video ? ytIdFromUrl(d.video) : '';
+  var videoPanel = ytId
+    ? '<div class="det-panel det-full"><div class="det-panel-title">Video</div><div class="det-video"><iframe src="https://www.youtube.com/embed/'+ytId+'" allowfullscreen></iframe></div></div>'
+    : '';
+
+  // Admin edit section for GL
+  var es = '';
+  if(canManage){
+    var do2 = ['','Extreme Demon','Insane Demon','Hard Demon','Medium Demon','Easy Demon','Insane'].map(function(x){
+      return '<option value="'+x+'"'+(d.diff===x?' selected':'')+'>'+( x||'Sin asignar')+'</option>';
+    }).join('');
+    es =
+      '<div class="edit-section" style="padding:0 1.2rem .8rem" onclick="event.stopPropagation()">'+
+        '<h5 style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu2);padding:.6rem 0 .5rem;margin:0;border-top:1px solid var(--border)">Editar nivel</h5>'+
+        '<div class="edit-field"><label>Nombre</label><input id="glen_'+key+'" value="'+ea(d.name)+'" autocomplete="off"></div>'+
+        '<div class="edit-field"><label>ID de GD</label><input id="glei_'+key+'" value="'+ea(d.id)+'" autocomplete="off"></div>'+
+        '<div class="edit-field"><label>Dificultad</label><select id="gled_'+key+'">'+do2+'</select></div>'+
+        '<div class="edit-field"><label>Verificador</label><input id="glev_'+key+'" value="'+ea(d.ver)+'" autocomplete="off" list="user-datalist"></div>'+
+        '<div class="edit-field"><label>Creador</label><input id="glecr_'+key+'" value="'+ea(d.creator||'')+'" autocomplete="off"></div>'+
+        '<div class="edit-field"><label>ATTs</label><input type="number" id="gleat_'+key+'" value="'+ea(d.atts||'')+'"></div>'+
+        '<div class="edit-field"><label>Video YouTube URL</label><input id="glevid_'+key+'" value="'+ea(d.video||'')+'" autocomplete="off"></div>'+
+      '</div>'+
+      '<div class="edit-actions">'+
+        '<button class="btn-save" onclick="glSaveLevel(\''+ea(key)+'\',event)">Guardar</button>'+
+        '<button class="btn-cancel" onclick="glTogCard(\''+ea(key)+'\',event)">Cancelar</button>'+
+        '<button class="del-btn" onclick="glDeleteLevel(\''+ea(key)+'\',event)">✕</button>'+
+      '</div>';
+  }
+
+  var det =
+    '<div class="det-body">'+
+      '<div class="det-top-row">'+infoPanel+'</div>'+
+      videoPanel+
+    '</div>';
+
+  var accentStyle = d.accent ? 'style="border-left:3px solid '+d.accent+' !important"' : '';
+  var stagger = Math.min((d.rank-1)*0.04, 0.25);
+  return '<div class="demon-card '+rc(d.rank)+'" id="gl-card-'+ea(key)+'" data-glkey="'+ea(key)+'" data-d="'+ea(d.diff||'')+'" '+accentStyle+' style="animation-delay:'+stagger+'s" onclick="glTogCard(\''+ea(key)+'\',event)">'+
+    '<div class="card-row">'+
+      '<div class="rank-col"><div class="rank-num">'+d.rank+'</div><div class="rank-label">TOP</div></div>'+
+      '<div class="card-info">'+
+        '<div class="card-name'+(emp?' empty':'')+'">'+( emp?'Sin nombre':esc(d.name))+'</div>'+
+        '<div class="card-meta">'+db2+idb+ab+'</div>'+
+        '<div class="card-sub">'+
+          (d.ver?'<span><strong>'+esc(d.ver)+'</strong></span>':'')+
+          (d.creator&&d.creator!==d.ver?'<span class="sep">·</span><span>'+esc(d.creator)+'</span>':'')+
+        '</div>'+
+        diffBar+
+      '</div>'+
+      '<div class="card-right"><div class="expand-arrow">▾</div></div>'+
+      '<div class="card-thumb">'+ti+'</div>'+
+    '</div>'+
+    '<div class="card-detail">'+det+es+'</div>'+
+  '</div>';
+}
+
+function glTogCard(key, ev){
+  if(ev.target.closest('.edit-actions,.del-btn'))return;
+  var c = document.getElementById('gl-card-'+key);
+  if(!c)return;
+  var was = c.classList.contains('open');
+  document.querySelectorAll('#gl-levels-panel .demon-card.open').forEach(function(x){x.classList.remove('open');});
+  if(!was) c.classList.add('open');
+}
+
+function glSaveLevel(key, ev){
+  ev.stopPropagation();
+  if(!glCanManage(_glCurrentId))return;
+  var updates = {
+    name: (document.getElementById('glen_'+key).value||'').trim(),
+    id:   (document.getElementById('glei_'+key).value||'').trim(),
+    diff: document.getElementById('gled_'+key).value,
+    ver:  (document.getElementById('glev_'+key).value||'').trim(),
+    creator: (document.getElementById('glecr_'+key).value||'').trim(),
+    atts: (document.getElementById('gleat_'+key).value||'').trim(),
+    video: (document.getElementById('glevid_'+key).value||'').trim(),
+  };
+  if(!updates.name){toast('El nombre no puede estar vacío','error');return;}
+  glRef.child(_glCurrentId+'/levels/'+key).update(updates)
+    .then(function(){toast('Nivel guardado ✓');var c=document.getElementById('gl-card-'+key);if(c)c.classList.remove('open');});
+}
+
 ['ov-add','ov-victor','ov-suggest','ov-announce','ov-player-profile','ov-torneo'].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});});
 document.getElementById('ov-username-change').addEventListener('click',function(e){if(e.target===this)closeUsernameChange();});
 document.getElementById('ov-torneo-submit').addEventListener('click',function(e){if(e.target===this)closeTorneoSubmit();});
@@ -4503,7 +4602,19 @@ document.addEventListener('keydown',function(e){
     </div>
     <div class="gl-modal-field">
       <label>Verificador</label>
-      <input id="gl-l-ver" placeholder="Nombre del verificador...">
+      <input id="gl-l-ver" placeholder="Nombre del verificador..." autocomplete="off" list="user-datalist">
+    </div>
+    <div class="gl-modal-field">
+      <label>Creador</label>
+      <input id="gl-l-creator" placeholder="Nombre del creador..." autocomplete="off">
+    </div>
+    <div class="gl-modal-field">
+      <label>ATTs</label>
+      <input id="gl-l-atts" type="number" placeholder="Intentos del verificador...">
+    </div>
+    <div class="gl-modal-field">
+      <label>Video YouTube (opcional)</label>
+      <input id="gl-l-video" placeholder="https://youtu.be/...">
     </div>
     <div class="dlgact">
       <button class="dlgcancel" onclick="glCloseAddLevel()">Cancelar</button>
