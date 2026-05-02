@@ -403,6 +403,22 @@ body.light-mode header{background:linear-gradient(135deg,#ffffff,#f4f6fc 60%,#ff
 .table-view tr:hover td{background:rgba(255,255,255,.02);}
 .table-view tr:last-child td{border-bottom:none;}
 
+/* ══ TWO COLUMN LAYOUT ══ */
+.tables-container{display:grid;grid-template-columns:1fr 350px;gap:2rem;align-items:start;}
+.main-table-section{min-width:0;}
+.challenge-list-section{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem;position:sticky;top:6rem;}
+.challenge-list-header h3{font-size:14px;font-weight:900;color:var(--accent);margin-bottom:1rem;text-align:center;text-transform:uppercase;letter-spacing:.08em;}
+.challenge-table{width:100%;border-collapse:collapse;font-size:11px;}
+.challenge-table th{font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:var(--mu2);font-weight:700;padding:.5rem;border-bottom:1px solid var(--border);text-align:left;background:var(--bg3);}
+.challenge-table td{padding:.4rem .5rem;border-bottom:1px solid var(--border);vertical-align:middle;}
+.challenge-table tr:hover td{background:rgba(255,255,255,.02);}
+.challenge-table tr:last-child td{border-bottom:none;}
+.challenge-table td:nth-child(1){font-family:'Share Tech Mono',monospace;color:var(--mu);font-weight:700;width:30px;}
+.challenge-table td:nth-child(2){font-weight:600;}
+.challenge-table td:nth-child(3){width:80px;}
+.challenge-table td:nth-child(4){width:100px;}
+.challenge-table td:nth-child(5){font-family:'Share Tech Mono',monospace;width:40px;}
+
 /* ══ CARD ACCENT COLOR ══ */
 .demon-card[data-accent]{border-left:3px solid var(--card-accent,var(--accent))!important;}
 .color-picker-wrap{display:flex;gap:6px;flex-wrap:wrap;margin-top:.4rem;}
@@ -1224,8 +1240,7 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 1.5rem calc(260px 
     <button class="tab-btn"        id="tab-suggestions" onclick="switchTab('suggestions')">Sugerencias</button>
     <button class="tab-btn"        id="tab-history"     onclick="switchTab('history')">Historial</button>
     <button class="tab-btn"        id="tab-stats"       onclick="switchTab('stats')">Stats</button>
-    <button class="tab-btn"        id="tab-gallery"     onclick="switchTab('gallery')">🖼 Galería</button>
-    <button class="tab-btn"        id="tab-globallists"  onclick="switchTab('globallists')">🌐 Global Lists</button>
+        <button class="tab-btn"        id="tab-globallists"  onclick="switchTab('globallists')">🌐 Global Lists</button>
     <button class="tab-btn"        id="tab-torneos"     onclick="switchTab('torneos')">🏆 Torneos</button>
     <button class="tab-btn"        id="tab-profile"     onclick="switchTab('profile')" style="display:none">Mi perfil</button>
   </div>
@@ -1288,8 +1303,7 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 1.5rem calc(260px 
             <button class="vbtn active" id="vbl" onclick="setView('list')">Lista</button>
             <button class="vbtn" id="vbc" onclick="setView('compact')">Compact</button>
             <button class="vbtn" id="vbt" onclick="setView('table')">Tabla</button>
-            <button class="vbtn" id="vbg" onclick="setView('gallery')">🖼 Galería</button>
-            <select class="ppg-select" id="ppg-select" onchange="setPPG(this.value)" title="Resultados por página">
+                        <select class="ppg-select" id="ppg-select" onchange="setPPG(this.value)" title="Resultados por página">
               <option value="10">10 / pág</option>
               <option value="20" selected>20 / pág</option>
               <option value="50">50 / pág</option>
@@ -1299,8 +1313,33 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 1.5rem calc(260px 
           <button class="add-btn" id="btn-add" style="display:none" onclick="openAdd()"><span class="pl">+</span> Agregar</button>
         </div>
       </div>
-      <div id="list-container"></div>
-      <div class="pagination" id="pagination"></div>
+      <div class="tables-container">
+        <div class="main-table-section">
+          <div id="list-container"></div>
+          <div class="pagination" id="pagination"></div>
+        </div>
+        <div class="challenge-list-section">
+          <div class="challenge-list-header">
+            <h3>Challenge List</h3>
+          </div>
+          <div class="challenge-list-container">
+            <table class="challenge-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nombre</th>
+                  <th>Dificultad</th>
+                  <th>Verificador</th>
+                  <th>ATTs</th>
+                </tr>
+              </thead>
+              <tbody id="challenge-tbody">
+                <!-- Challenge levels will be populated here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -2052,11 +2091,35 @@ function buildCard(d){
     '</div><div class="card-detail">'+det+es+buildComments(d.rank)+'</div></div>';
 }
 
+function renderChallengeList(){
+  var challengeData=DATA.filter(function(d){
+    return d.name && (d.diff==='Extreme Demon' || d.diff==='Insane Demon');
+  }).slice(0,10);
+  
+  var tbody=document.getElementById('challenge-tbody');
+  if(!tbody) return;
+  
+  if(!challengeData.length){
+    tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--mu2);font-style:italic">Sin niveles challenge</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML=challengeData.map(function(d){
+    return'<tr onclick="togCard('+d.rank+',event)" style="cursor:pointer">'+
+      '<td>'+d.rank+'</td>'+
+      '<td>'+(d.name?esc(d.name):'<span style="color:var(--mu2);font-style:italic">Vacío</span>')+'</td>'+
+      '<td>'+(d.diff?'<span class="badge-diff '+dc(d.diff)+'" style="font-size:8px">'+esc(d.diff)+'</span>':'—')+'</td>'+
+      '<td>'+(d.ver?esc(d.ver):'—')+'</td>'+
+      '<td>'+(d.atts||'—')+'</td>'+
+    '</tr>';
+  }).join('');
+}
+
 function renderPage(){
   var s=(pg-1)*PPG,page=filtered.slice(s,s+PPG);
   var lc=document.getElementById('list-container');
   if(vm==='table'){
-    if(!page.length){lc.innerHTML='<div style="text-align:center;padding:3rem;color:var(--mu2)">No hay niveles.</div>';lc.className='';renderPag();return;}
+    if(!page.length){lc.innerHTML='<div style="text-align:center;padding:3rem;color:var(--mu2)">No hay niveles.</div>';lc.className='';renderPag();renderChallengeList();return;}
     lc.innerHTML='<table class="table-view"><thead><tr>'+
       '<th>#</th><th>Nombre</th><th>Dificultad</th><th>Verificador</th><th>ATTs</th><th>1°</th><th>2°</th><th>3°</th><th>Pts</th>'+
     '</tr></thead><tbody>'+
@@ -2073,10 +2136,10 @@ function renderPage(){
         '<td style="color:var(--accent);font-family:Share Tech Mono,monospace;font-weight:700">'+pts(d.rank,d.diff)+'</td>'+
       '</tr>';
     }).join('')+'</tbody></table>';
-    lc.className='';if(isAdmin)setupDnD();renderPag();return;
+    lc.className='';if(isAdmin)setupDnD();renderPag();renderChallengeList();return;
   }
   if(vm==='gallery'){
-    if(!page.length){lc.innerHTML='<div style="text-align:center;padding:3rem;color:var(--mu2)">No hay niveles.</div>';lc.className='';renderPag();return;}
+    if(!page.length){lc.innerHTML='<div style="text-align:center;padding:3rem;color:var(--mu2)">No hay niveles.</div>';lc.className='';renderPag();renderChallengeList();return;}
     var DIFF_COLORS={'Extreme Demon':'#e05050','Insane Demon':'#e06820','Hard Demon':'#e0c030','Medium Demon':'#50b050','Easy Demon':'#50a0e0','Insane':'#d080ff'};
     lc.innerHTML='<div class="gallery-grid">'+page.map(function(d){
       var emp=!d.name;
@@ -2106,11 +2169,11 @@ function renderPage(){
         '</div>'+
       '</div>';
     }).join('')+'</div>';
-    lc.className='';renderPag();return;
+    lc.className='';renderPag();renderChallengeList();return;
   }
   var html=page.length?page.map(buildCard).join(''):'<div style="text-align:center;padding:3rem;color:var(--mu2)">No hay niveles.'+(isAdmin?' Presioná <strong style="color:var(--accent)">+ Agregar</strong>.':'')+'</div>';
   lc.innerHTML=html;lc.className=vm==='compact'?'compact-mode':'';
-  if(isAdmin)setupDnD();renderPag();
+  if(isAdmin)setupDnD();renderPag();renderChallengeList();
 }
 function renderPag(){
   var tot=Math.ceil(filtered.length/PPG),el=document.getElementById('pagination');
