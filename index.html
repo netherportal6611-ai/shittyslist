@@ -403,22 +403,6 @@ body.light-mode header{background:linear-gradient(135deg,#ffffff,#f4f6fc 60%,#ff
 .table-view tr:hover td{background:rgba(255,255,255,.02);}
 .table-view tr:last-child td{border-bottom:none;}
 
-/* ══ TWO COLUMN LAYOUT ══ */
-.tables-container{display:grid;grid-template-columns:1fr 350px;gap:2rem;align-items:start;}
-.main-table-section{min-width:0;}
-.challenge-list-section{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem;position:sticky;top:6rem;}
-.challenge-list-header h3{font-size:14px;font-weight:900;color:var(--accent);margin-bottom:1rem;text-align:center;text-transform:uppercase;letter-spacing:.08em;}
-.challenge-table{width:100%;border-collapse:collapse;font-size:11px;}
-.challenge-table th{font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:var(--mu2);font-weight:700;padding:.5rem;border-bottom:1px solid var(--border);text-align:left;background:var(--bg3);}
-.challenge-table td{padding:.4rem .5rem;border-bottom:1px solid var(--border);vertical-align:middle;}
-.challenge-table tr:hover td{background:rgba(255,255,255,.02);}
-.challenge-table tr:last-child td{border-bottom:none;}
-.challenge-table td:nth-child(1){font-family:'Share Tech Mono',monospace;color:var(--mu);font-weight:700;width:30px;}
-.challenge-table td:nth-child(2){font-weight:600;}
-.challenge-table td:nth-child(3){width:80px;}
-.challenge-table td:nth-child(4){width:100px;}
-.challenge-table td:nth-child(5){font-family:'Share Tech Mono',monospace;width:40px;}
-
 /* ══ CARD ACCENT COLOR ══ */
 .demon-card[data-accent]{border-left:3px solid var(--card-accent,var(--accent))!important;}
 .color-picker-wrap{display:flex;gap:6px;flex-wrap:wrap;margin-top:.4rem;}
@@ -1236,11 +1220,13 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 1.5rem calc(260px 
 <div class="tabs-bar">
   <div class="tabs-inner">
     <button class="tab-btn active" id="tab-list"        onclick="switchTab('list')">Lista</button>
+    <button class="tab-btn"        id="tab-challenges"  onclick="switchTab('challenges')">Challenges</button>
     <button class="tab-btn"        id="tab-players"     onclick="switchTab('players')">Jugadores</button>
     <button class="tab-btn"        id="tab-suggestions" onclick="switchTab('suggestions')">Sugerencias</button>
     <button class="tab-btn"        id="tab-history"     onclick="switchTab('history')">Historial</button>
     <button class="tab-btn"        id="tab-stats"       onclick="switchTab('stats')">Stats</button>
-        <button class="tab-btn"        id="tab-globallists"  onclick="switchTab('globallists')">🌐 Global Lists</button>
+    <button class="tab-btn"        id="tab-gallery"     onclick="switchTab('gallery')">🖼 Galería</button>
+    <button class="tab-btn"        id="tab-globallists"  onclick="switchTab('globallists')">🌐 Global Lists</button>
     <button class="tab-btn"        id="tab-torneos"     onclick="switchTab('torneos')">🏆 Torneos</button>
     <button class="tab-btn"        id="tab-profile"     onclick="switchTab('profile')" style="display:none">Mi perfil</button>
   </div>
@@ -1303,7 +1289,8 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 1.5rem calc(260px 
             <button class="vbtn active" id="vbl" onclick="setView('list')">Lista</button>
             <button class="vbtn" id="vbc" onclick="setView('compact')">Compact</button>
             <button class="vbtn" id="vbt" onclick="setView('table')">Tabla</button>
-                        <select class="ppg-select" id="ppg-select" onchange="setPPG(this.value)" title="Resultados por página">
+            <button class="vbtn" id="vbg" onclick="setView('gallery')">🖼 Galería</button>
+            <select class="ppg-select" id="ppg-select" onchange="setPPG(this.value)" title="Resultados por página">
               <option value="10">10 / pág</option>
               <option value="20" selected>20 / pág</option>
               <option value="50">50 / pág</option>
@@ -1313,33 +1300,35 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 1.5rem calc(260px 
           <button class="add-btn" id="btn-add" style="display:none" onclick="openAdd()"><span class="pl">+</span> Agregar</button>
         </div>
       </div>
-      <div class="tables-container">
-        <div class="main-table-section">
-          <div id="list-container"></div>
-          <div class="pagination" id="pagination"></div>
-        </div>
-        <div class="challenge-list-section">
-          <div class="challenge-list-header">
-            <h3>Challenge List</h3>
+      <div id="list-container"></div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+</div>
+
+<div class="tab-page" id="page-challenges">
+  <div class="layout">
+    <div class="list-area">
+      <div class="list-top">
+        <div><div class="ltitle editable" id="txt-challenges-ranking">Challenge Rankings</div><div class="lsub" id="challenges-lsub">0 niveles</div></div>
+        <div class="lctrl">
+          <div class="view-wrap" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <button class="vbtn active" id="challenges-vbl" onclick="setChallengesView('list')">Lista</button>
+            <button class="vbtn" id="challenges-vbc" onclick="setChallengesView('compact')">Compact</button>
+            <button class="vbtn" id="challenges-vbt" onclick="setChallengesView('table')">Tabla</button>
+            <button class="vbtn" id="challenges-vbg" onclick="setChallengesView('gallery')">🖼 Galería</button>
+            <select class="ppg-select" id="challenges-ppg-select" onchange="setChallengesPPG(this.value)" title="Resultados por página">
+              <option value="10">10 / pág</option>
+              <option value="20" selected>20 / pág</option>
+              <option value="50">50 / pág</option>
+              <option value="100">100 / pág</option>
+            </select>
           </div>
-          <div class="challenge-list-container">
-            <table class="challenge-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Nombre</th>
-                  <th>Dificultad</th>
-                  <th>Verificador</th>
-                  <th>ATTs</th>
-                </tr>
-              </thead>
-              <tbody id="challenge-tbody">
-                <!-- Challenge levels will be populated here -->
-              </tbody>
-            </table>
-          </div>
+          <button class="add-btn" id="btn-challenges-add" style="display:none" onclick="openChallengesAdd()"><span class="pl">+</span> Agregar</button>
         </div>
       </div>
+      <div id="challenges-list-container"></div>
+      <div class="pagination" id="challenges-pagination"></div>
     </div>
   </div>
 </div>
@@ -1568,6 +1557,37 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 1.5rem calc(260px 
       <button class="dlgcancel" onclick="closeTorneoSubmit()">Cancelar</button>
       <button class="dlgok" onclick="submitTorneoResult()">Enviar resultado</button>
     </div>
+  </div>
+</div>
+
+<!-- CHALLENGES ADD MODAL -->
+<div class="overlay" id="ov-challenges-add">
+  <div class="modal">
+    <div class="mhd"><h3>Agregar <span>Challenge</span></h3><button class="mcl" onclick="closeChallengesAdd()">✕</button></div>
+    <div class="mbody">
+      <div class="flf"><input type="text" id="challenges-m-name" placeholder=" " autocomplete="off"><label>Nombre del nivel</label></div>
+      <div class="twoc">
+        <div class="flf"><input type="text" id="challenges-m-id" placeholder=" " autocomplete="off" style="font-family:'Share Tech Mono',monospace"><label>ID</label></div>
+        <div class="flf"><input type="number" id="challenges-m-atts" placeholder=" " min="0"><label>ATTs</label></div>
+      </div>
+      <div class="flf"><input type="text" id="challenges-m-ver" placeholder=" " autocomplete="off" list="user-datalist"><label>Verificador</label></div>
+      <div class="flf"><input type="text" id="challenges-m-creator" placeholder=" " autocomplete="off"><label>Creador del nivel</label></div>
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--mu2);margin-bottom:8px;">Dificultad</div>
+      <div class="dpick">
+        <div class="dopt" data-val="Extreme Demon" onclick="pickChallengesDiff(this)"><span class="ico">☠</span>Extreme</div>
+        <div class="dopt" data-val="Insane Demon"  onclick="pickChallengesDiff(this)"><span class="ico">💀</span>Insane</div>
+        <div class="dopt" data-val="Hard Demon"    onclick="pickChallengesDiff(this)"><span class="ico">👹</span>Hard</div>
+        <div class="dopt" data-val="Medium Demon"  onclick="pickChallengesDiff(this)"><span class="ico">😈</span>Medium</div>
+        <div class="dopt" data-val="Easy Demon"    onclick="pickChallengesDiff(this)"><span class="ico">😤</span>Easy</div>
+        <div class="dopt" data-val="Insane"        onclick="pickChallengesDiff(this)"><span class="ico">👿</span>Insane</div>
+      </div>
+      <div class="twoc">
+        <div class="flf"><input type="text" id="challenges-m-v1" placeholder=" " autocomplete="off" list="user-datalist"><label>1° Victor</label></div>
+        <div class="flf"><input type="text" id="challenges-m-v2" placeholder=" " autocomplete="off" list="user-datalist"><label>2° Victor</label></div>
+      </div>
+      <div class="flf" style="max-width:50%"><input type="text" id="challenges-m-v3" placeholder=" " autocomplete="off" list="user-datalist"><label>3° Victor</label></div>
+    </div>
+    <div class="mfoot"><button class="btn-sec" onclick="closeChallengesAdd()">Cancelar</button><button class="btn-pri" onclick="submitChallengesAdd()">Agregar</button></div>
   </div>
 </div>
 
@@ -2091,35 +2111,11 @@ function buildCard(d){
     '</div><div class="card-detail">'+det+es+buildComments(d.rank)+'</div></div>';
 }
 
-function renderChallengeList(){
-  var challengeData=DATA.filter(function(d){
-    return d.name && (d.diff==='Extreme Demon' || d.diff==='Insane Demon');
-  }).slice(0,10);
-  
-  var tbody=document.getElementById('challenge-tbody');
-  if(!tbody) return;
-  
-  if(!challengeData.length){
-    tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--mu2);font-style:italic">Sin niveles challenge</td></tr>';
-    return;
-  }
-  
-  tbody.innerHTML=challengeData.map(function(d){
-    return'<tr onclick="togCard('+d.rank+',event)" style="cursor:pointer">'+
-      '<td>'+d.rank+'</td>'+
-      '<td>'+(d.name?esc(d.name):'<span style="color:var(--mu2);font-style:italic">Vacío</span>')+'</td>'+
-      '<td>'+(d.diff?'<span class="badge-diff '+dc(d.diff)+'" style="font-size:8px">'+esc(d.diff)+'</span>':'—')+'</td>'+
-      '<td>'+(d.ver?esc(d.ver):'—')+'</td>'+
-      '<td>'+(d.atts||'—')+'</td>'+
-    '</tr>';
-  }).join('');
-}
-
 function renderPage(){
   var s=(pg-1)*PPG,page=filtered.slice(s,s+PPG);
   var lc=document.getElementById('list-container');
   if(vm==='table'){
-    if(!page.length){lc.innerHTML='<div style="text-align:center;padding:3rem;color:var(--mu2)">No hay niveles.</div>';lc.className='';renderPag();renderChallengeList();return;}
+    if(!page.length){lc.innerHTML='<div style="text-align:center;padding:3rem;color:var(--mu2)">No hay niveles.</div>';lc.className='';renderPag();return;}
     lc.innerHTML='<table class="table-view"><thead><tr>'+
       '<th>#</th><th>Nombre</th><th>Dificultad</th><th>Verificador</th><th>ATTs</th><th>1°</th><th>2°</th><th>3°</th><th>Pts</th>'+
     '</tr></thead><tbody>'+
@@ -2136,10 +2132,10 @@ function renderPage(){
         '<td style="color:var(--accent);font-family:Share Tech Mono,monospace;font-weight:700">'+pts(d.rank,d.diff)+'</td>'+
       '</tr>';
     }).join('')+'</tbody></table>';
-    lc.className='';if(isAdmin)setupDnD();renderPag();renderChallengeList();return;
+    lc.className='';if(isAdmin)setupDnD();renderPag();return;
   }
   if(vm==='gallery'){
-    if(!page.length){lc.innerHTML='<div style="text-align:center;padding:3rem;color:var(--mu2)">No hay niveles.</div>';lc.className='';renderPag();renderChallengeList();return;}
+    if(!page.length){lc.innerHTML='<div style="text-align:center;padding:3rem;color:var(--mu2)">No hay niveles.</div>';lc.className='';renderPag();return;}
     var DIFF_COLORS={'Extreme Demon':'#e05050','Insane Demon':'#e06820','Hard Demon':'#e0c030','Medium Demon':'#50b050','Easy Demon':'#50a0e0','Insane':'#d080ff'};
     lc.innerHTML='<div class="gallery-grid">'+page.map(function(d){
       var emp=!d.name;
@@ -2169,11 +2165,11 @@ function renderPage(){
         '</div>'+
       '</div>';
     }).join('')+'</div>';
-    lc.className='';renderPag();renderChallengeList();return;
+    lc.className='';renderPag();return;
   }
   var html=page.length?page.map(buildCard).join(''):'<div style="text-align:center;padding:3rem;color:var(--mu2)">No hay niveles.'+(isAdmin?' Presioná <strong style="color:var(--accent)">+ Agregar</strong>.':'')+'</div>';
   lc.innerHTML=html;lc.className=vm==='compact'?'compact-mode':'';
-  if(isAdmin)setupDnD();renderPag();renderChallengeList();
+  if(isAdmin)setupDnD();renderPag();
 }
 function renderPag(){
   var tot=Math.ceil(filtered.length/PPG),el=document.getElementById('pagination');
@@ -2754,6 +2750,7 @@ function setAdmin(v){
   isAdmin=v;if(!v&&isEM)toggleEM();
   document.getElementById('btn-add').style.display=v?'flex':'none';
   document.getElementById('btn-add-victor').style.display=v?'flex':'none';
+  document.getElementById('btn-challenges-add').style.display=v?'flex':'none';
   document.getElementById('panel-admin').style.display=v?'block':'none';
   document.getElementById('admin-bar').classList.toggle('show',v);
   document.body.classList.toggle('admin-mode',v);
@@ -3463,7 +3460,7 @@ function renderTorneos(){
   }).join('');
 }
 
-/* PATCH switchTab to handle gallery and torneos */
+/* PATCH switchTab to handle gallery, torneos, and challenges */
 (function(){
   var orig=switchTab;
   switchTab=function(name){
@@ -3474,8 +3471,142 @@ function renderTorneos(){
       var btn=document.getElementById('btn-torneo-create');
       if(btn)btn.style.display=isAdmin?'flex':'none';
     }
+    if(name==='challenges')renderChallenges();
   };
 })();
+
+/* ══ CHALLENGES ══ */
+var CHALLENGES_DATA=[],CHALLENGES_FILTERED=[],challengesPg=1,challengesPPG=20,challengesVM='list',_challengesSd='';
+var challengesRef=db.ref('challenges');
+function renderChallenges(){
+  var el=document.getElementById('challenges-list-container');
+  if(!el)return;
+  var s=(challengesPg-1)*challengesPPG,page=CHALLENGES_FILTERED.slice(s,s+challengesPPG);
+  if(challengesVM==='table'){
+    if(!page.length){el.innerHTML='<div style="text-align:center;padding:3rem;color:var(--mu2)">No hay niveles.</div>';el.className='';renderChallengesPag();return;}
+    el.innerHTML='<table class="table-view"><thead><tr>'+
+      '<th>#</th><th>Nombre</th><th>Dificultad</th><th>Verificador</th><th>ATTs</th><th>1°</th><th>2°</th><th>3°</th><th>Pts</th>'+
+    '</tr></thead><tbody>'+
+    page.map(function(d){
+      return'<tr onclick="togChallengesCard('+d.rank+',event)" style="cursor:pointer">'+
+        '<td style="font-family:Share Tech Mono,monospace;color:var(--mu);font-weight:700">'+d.rank+'</td>'+
+        '<td style="font-weight:700">'+(d.name?esc(d.name):'<span style="color:var(--mu2);font-style:italic">Vacío</span>')+'</td>'+
+        '<td>'+(d.diff?'<span class="badge-diff '+dc(d.diff)+'">'+esc(d.diff)+'</span>':'—')+'</td>'+
+        '<td>'+(d.ver?esc(d.ver):'—')+'</td>'+
+        '<td style="font-family:Share Tech Mono,monospace">'+(d.atts||'—')+'</td>'+
+        '<td>'+(d.v1?esc(d.v1):'—')+'</td>'+
+        '<td>'+(d.v2?esc(d.v2):'—')+'</td>'+
+        '<td>'+(d.v3?esc(d.v3):'—')+'</td>'+
+        '<td style="color:var(--accent);font-family:Share Tech Mono,monospace;font-weight:700">'+pts(d.rank,d.diff)+'</td>'+
+      '</tr>';
+    }).join('')+'</tbody></table>';
+    el.className='';renderChallengesPag();return;
+  }
+  if(challengesVM==='gallery'){
+    if(!page.length){el.innerHTML='<div style="text-align:center;padding:3rem;color:var(--mu2)">No hay niveles.</div>';el.className='';renderChallengesPag();return;}
+    var DIFF_COLORS={'Extreme Demon':'#e05050','Insane Demon':'#e06820','Hard Demon':'#e0c030','Medium Demon':'#50b050','Easy Demon':'#50a0e0','Insane':'#d080ff'};
+    el.innerHTML='<div class="gallery-grid">'+page.map(function(d){
+      var emp=!d.name;
+      var rc2=d.rank===1?'r1':d.rank===2?'r2':d.rank===3?'r3':'';
+      var vc=[d.v1,d.v2,d.v3].filter(Boolean).length;
+      var thumbHtml=d.img
+        ?'<img src="'+ea(d.img)+'" alt="'+ea(d.name||'')+'">'
+        :'<div class="gc-thumb-empty">🎮</div>';
+      var diffColor=d.diff?DIFF_COLORS[d.diff]||'var(--mu2)':'var(--mu2)';
+      var diffBadge=d.diff?'<span class="badge-diff '+dc(d.diff)+'" style="font-size:9px">'+esc(d.diff)+'</span>':'';
+      var attsB=d.atts?'<span class="badge-atts" style="font-size:9px">'+esc(d.atts)+' ATTs</span>':'';
+      var vpills='<div class="gc-vpills">'+
+        '<div class="vdot v1'+(vc>=1?' on':'')+'"></div>'+
+        '<div class="vdot v2'+(vc>=2?' on':'')+'"></div>'+
+        '<div class="vdot v3'+(vc>=3?' on':'')+'"></div>'+
+      '</div>';
+      return'<div class="gallery-card '+rc2+'" onclick="togChallengesCard('+d.rank+',event)">'+
+        '<div class="gc-thumb">'+thumbHtml+
+          '<div class="gc-rank '+rc2+'">#'+d.rank+'</div>'+
+          (d.diff?'<div class="gc-diff-dot" style="background:'+diffColor+'"></div>':'')+
+        '</div>'+
+        '<div class="gc-body">'+
+          '<div class="gc-name'+(emp?' empty':'')+'">'+( emp?'Slot #'+d.rank:esc(d.name))+'</div>'+
+          '<div class="gc-meta">'+diffBadge+attsB+'</div>'+
+          (d.ver?'<div class="gc-ver">Ver: <span>'+esc(d.ver)+'</span></div>':'')+
+          '<div class="gc-footer">'+vpills+'<span class="gc-pts">'+pts(d.rank,d.diff)+'pts</span></div>'+
+        '</div>'+
+      '</div>';
+    }).join('')+'</div>';
+    el.className='';renderChallengesPag();return;
+  }
+  var html=page.length?page.map(buildChallengesCard).join(''):'<div style="text-align:center;padding:3rem;color:var(--mu2)">No hay niveles.'+(isAdmin?' Presioná <strong style="color:var(--accent)">+ Agregar</strong>.':'')+'</div>';
+  el.innerHTML=html;el.className=challengesVM==='compact'?'compact-mode':'';
+  renderChallengesPag();
+}
+function buildChallengesCard(d){
+  var emp=!d.name;
+  var vc=[d.v1,d.v2,d.v3].filter(Boolean).length;
+  var db2=d.diff?'<span class="badge-diff '+dc(d.diff)+'">'+esc(d.diff)+'</span>':'<span class="badge-diff d-no">Sin asignar</span>';
+  var idb=d.id?'<span class="badge-id">#'+esc(d.id)+'</span>':'';
+  var ab=d.atts?'<span class="badge-atts">'+esc(d.atts)+' ATTs</span>':'';
+  var diffBar=d.diff?'<div class="diff-bar-wrap"><div class="diff-bar" style="'+diffBarStyle(d.diff)+'"></div></div>':'';
+  var ti=d.img
+    ?'<div class="card-thumb-inner"><img src="'+ea(d.img)+'" alt="'+ea(d.name||'')+'"></div>'
+    :'<div class="card-thumb-inner"><div class="card-thumb-empty"><svg width="34" height="23" viewBox="0 0 64 44" fill="none" opacity=".4"><rect x="1" y="1" width="62" height="42" rx="4" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="22" r="7" stroke="currentColor" stroke-width="1.5"/><circle cx="10.5" cy="11.5" r="1.5" fill="currentColor"/><circle cx="17.5" cy="11.5" r="1.5" fill="currentColor"/><path d="M10 16.5 Q14 19.5 18 16.5" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linecap="round"/></svg></div></div>';
+  var det='<div class="det-body">'+
+    '<div class="det-panel">'+
+      '<div class="det-panel-title">Info</div>'+
+      '<div class="det-kv">'+
+        (d.id?'<div class="det-row"><span class="det-k">ID</span><span class="det-v mono">'+esc(d.id)+'</span></div>':'')+
+        (d.ver?'<div class="det-row"><span class="det-k">Verificador</span><span class="det-v">'+esc(d.ver)+'</span></div>':'')+
+        (d.creator&&d.creator!==d.ver?'<div class="det-row"><span class="det-k">Creador</span><span class="det-v">'+esc(d.creator)+'</span></div>':'')+
+        (d.atts?'<div class="det-row"><span class="det-k">ATTs</span><span class="det-v mono accent">'+esc(d.atts)+'</span></div>':'')+
+        '<div class="det-row"><span class="det-k">Rank</span><span class="det-v mono">#'+d.rank+'</span></div>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+  var rc2=d.rank===1?'r1':d.rank===2?'r2':d.rank===3?'r3':'';
+  return'<div class="demon-card '+rc2+'" id="challenges-card-'+d.rank+'" data-rank="'+d.rank+'" data-d="'+ea(d.diff||'')+'" onclick="togChallengesCard('+d.rank+',event)">'+
+    '<div class="card-row">'+
+      '<div class="rank-col"><div class="rank-num">'+d.rank+'</div><div class="rank-label">TOP</div></div>'+
+      '<div class="card-info"><div class="card-name'+(emp?' empty':'')+'">'+( emp?'Slot #'+d.rank+' — Vacío':esc(d.name))+'</div><div class="card-meta">'+db2+idb+ab+'</div>'+(d.ver?'<div class="card-ver">Verificador: <span>'+esc(d.ver)+'</span>'+(d.creator?' &nbsp;·&nbsp; Creador: <span>'+esc(d.creator)+'</span>':'')+'</div>':(d.creator?'<div class="card-ver">Creador: <span>'+esc(d.creator)+'</span></div>':''))+diffBar+'</div>'+
+      '<div class="card-thumb">'+ti+'</div>'+
+      '<div class="card-right"><div class="expand-arrow">▾</div></div>'+
+    '</div><div class="card-detail">'+det+'</div></div>';
+}
+function togChallengesCard(rank,ev){
+  if(ev.target.closest('.edit-actions,.del-btn,.drag-handle,.thumb-cam-btn')||ev.target.tagName==='INPUT'||ev.target.tagName==='SELECT')return;
+  var c=document.getElementById('challenges-card-'+rank);
+  if(!c)return;
+  var was=c.classList.contains('open');
+  document.querySelectorAll('#challenges-list-container .demon-card.open').forEach(function(x){x.classList.remove('open');});
+  if(!was)c.classList.add('open');
+}
+function setChallengesView(mode){challengesVM=mode;['challenges-vbl','challenges-vbc','challenges-vbt','challenges-vbg'].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.remove('active');});var map={list:'challenges-vbl',compact:'challenges-vbc',table:'challenges-vbt',gallery:'challenges-vbg'};var el=document.getElementById(map[mode]);if(el)el.classList.add('active');renderChallenges();}
+function setChallengesPPG(val){challengesPPG=parseInt(val)||20;challengesPg=1;localStorage.setItem('shittylist-challenges-ppg', challengesPPG);renderChallenges();toast(challengesPPG+' resultados por página','info');}
+function renderChallengesPag(){
+  var tot=Math.ceil(CHALLENGES_FILTERED.length/challengesPPG),el=document.getElementById('challenges-pagination');
+  if(tot<=1){el.innerHTML='';return;}
+  var h='';if(challengesPg>1)h+='<button class="page-btn" onclick="goChallengesP('+(challengesPg-1)+')">◂</button>';
+  for(var i=1;i<=tot;i++)h+='<button class="page-btn'+(i===challengesPg?' active':'')+'" onclick="goChallengesP('+i+')">'+i+'</button>';
+  if(challengesPg<tot)h+='<button class="page-btn" onclick="goChallengesP('+(challengesPg+1)+')">▸</button>';
+  el.innerHTML=h;
+}
+function goChallengesP(n){challengesPg=n;renderChallenges();window.scrollTo({top:0,behavior:'smooth'});}
+function openChallengesAdd(){if(!isAdmin)return;var sd='';['challenges-m-name','challenges-m-id','challenges-m-atts','challenges-m-ver','challenges-m-creator','challenges-m-v1','challenges-m-v2','challenges-m-v3'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});document.querySelectorAll('.dopt').forEach(function(o){o.className='dopt';});document.getElementById('ov-challenges-add').classList.add('open');setTimeout(function(){document.getElementById('challenges-m-name').focus();},50);}
+function closeChallengesAdd(){document.getElementById('ov-challenges-add').classList.remove('open');}
+function pickChallengesDiff(el){_challengesSd=el.dataset.val;var cls={'Extreme Demon':'sex','Insane Demon':'sin','Hard Demon':'sha','Medium Demon':'sme','Easy Demon':'sea','Insane':'sno'};document.querySelectorAll('#ov-challenges-add .dopt').forEach(function(o){o.className='dopt';});el.className='dopt '+(cls[_challengesSd]||'');}
+function submitChallengesAdd(){if(!isAdmin)return;var name=document.getElementById('challenges-m-name').value.trim();if(!name){toast('Escribí un nombre','error');return;}var newRank=CHALLENGES_DATA.length+1;var newChallenge={rank:newRank,name:name,id:document.getElementById('challenges-m-id').value.trim(),atts:document.getElementById('challenges-m-atts').value.trim(),diff:_challengesSd,ver:document.getElementById('challenges-m-ver').value.trim(),creator:document.getElementById('challenges-m-creator').value.trim(),v1:document.getElementById('challenges-m-v1').value.trim(),v2:document.getElementById('challenges-m-v2').value.trim(),v3:document.getElementById('challenges-m-v3').value.trim()};challengesRef.child('n'+newRank).set(newChallenge).then(function(){closeChallengesAdd();toast('"'+name+'" agregado a Challenges ✓');});}
+
+// Load challenges data
+challengesRef.on('value',function(snap){
+  CHALLENGES_DATA=snap.val()?Object.values(snap.val()).sort(function(a,b){return a.rank-b.rank;}):[];
+  CHALLENGES_FILTERED=CHALLENGES_DATA;
+  updateChallengesStats();
+  var pp=document.getElementById('page-challenges');
+  if(pp&&pp.classList.contains('active'))renderChallenges();
+});
+function updateChallengesStats(){
+  var atts=CHALLENGES_DATA.reduce(function(a,d){return a+(parseInt(d.atts)||0);},0);
+  var vics=CHALLENGES_DATA.reduce(function(a,d){return a+[d.v1,d.v2,d.v3].filter(Boolean).length;},0);
+  document.getElementById('challenges-lsub').textContent=CHALLENGES_FILTERED.length+' nivel'+(CHALLENGES_FILTERED.length!==1?'es':'');
+}
 
 /* PATCH renderProfile to include achievements and show sparkline links in profile */
 (function(){
@@ -4737,3 +4868,4 @@ document.addEventListener('keydown',function(e){
 
 </body>
 </html>
+
