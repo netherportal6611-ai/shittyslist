@@ -1688,7 +1688,7 @@ function hideLoading(){
 
 /* ══ STATE ══ */
 var DATA=[],filtered=[],cUser=null,cUD=null,isAdmin=false,isEM=false;
-var pg=1,PPG=20,vm='list',dragSrc=null,_df='',selDiff='',_imgRank=null,_imgB64='';
+var pg=1,PPG=20,vm='list',dragSrc=null,_df='',selDiff='',_imgRank=null,_imgB64='',_imgListType='list';
 var PHASH='';
 var ALL_USERS={};  // uid -> {use
 /* ── new state (declared early so buildCard can reference them) ── */
@@ -2733,8 +2733,22 @@ function saveAnnounce(){var t=document.getElementById('an-title').value.trim(),t
 function clearAnnounce(){annRef.remove().then(function(){closeAnnounce();toast('Anuncio eliminado','info');});}
 
 /* ══ IMAGE MODAL ══ */
-function openIM(rank,ev){if(!isAdmin)return;ev.stopPropagation();_imgRank=rank;_imgB64='';var d=DATA.find(function(x){return x.rank===rank;});if(!d)return;document.getElementById('im-lvl').textContent=d.name||'Top '+rank;document.getElementById('im-file').value='';dzSet(d.img||'');document.getElementById('improc').style.display='none';document.getElementById('imov').classList.add('open');}
-function closeIM(){document.getElementById('imov').classList.remove('open');_imgRank=null;_imgB64='';}
+function openIM(rank,ev,listType){
+  if(!isAdmin)return;
+  if(ev)ev.stopPropagation();
+  _imgRank=rank;
+  _imgB64='';
+  _imgListType=listType==='challenges'?'challenges':'list';
+  var source=_imgListType==='challenges'?CHALLENGES_DATA:DATA;
+  var d=source.find(function(x){return x.rank===rank;});
+  if(!d)return;
+  document.getElementById('im-lvl').textContent=(_imgListType==='challenges'?'Challenge — ':'')+(d.name||'Top '+rank);
+  document.getElementById('im-file').value='';
+  dzSet(d.img||'');
+  document.getElementById('improc').style.display='none';
+  document.getElementById('imov').classList.add('open');
+}
+function closeIM(){document.getElementById('imov').classList.remove('open');_imgRank=null;_imgB64='';_imgListType='list';}
 function dzSet(src){var dz=document.getElementById('dz'),img=document.getElementById('dz-img'),ph=document.getElementById('dzph'),ov=document.getElementById('dzov');if(src){img.src=src;img.style.display='block';ph.style.display='none';dz.classList.add('has');ov.style.display='flex';}else{img.src='';img.style.display='none';ph.style.display='flex';dz.classList.remove('has');ov.style.display='none';}}
 function dzOv(e){e.preventDefault();document.getElementById('dz').classList.add('dov');}
 function dzLv(e){document.getElementById('dz').classList.remove('dov');}
@@ -2743,7 +2757,31 @@ function dzChange(e){var f=e.target.files&&e.target.files[0];if(f)dzProc(f);}
 function dzPick(e){e.stopPropagation();document.getElementById('im-file').click();}
 function dzRm(e){e.stopPropagation();_imgB64='__rm__';dzSet('');}
 function dzProc(file){if(!file.type.startsWith('image/')){toast('Solo imágenes','error');return;}if(file.size>2*1024*1024){toast('Máximo 2MB','error');return;}var p=document.getElementById('improc');p.style.display='block';var r=new FileReader();r.onload=function(e){_imgB64=e.target.result;dzSet(_imgB64);p.style.display='none';};r.onerror=function(){p.style.display='none';toast('Error','error');};r.readAsDataURL(file);}
-function saveIM(){if(_imgRank===null)return;var idx=DATA.findIndex(function(d){return d.rank===_imgRank;});if(idx===-1)return;if(_imgB64==='__rm__'){DATA[idx].img='';}else if(_imgB64){DATA[idx].img=_imgB64;}else{closeIM();return;}saveFB();closeIM();toast(_imgB64&&_imgB64!=='__rm__'?'Imagen guardada ✓':'Imagen eliminada','info');}
+function saveIM(){
+  if(_imgRank===null)return;
+  var isCh=_imgListType==='challenges';
+  var source=isCh?CHALLENGES_DATA:DATA;
+  var idx=source.findIndex(function(d){return d.rank===_imgRank;});
+  if(idx===-1)return;
+  if(_imgB64==='__rm__')source[idx].img='';
+  else if(_imgB64)source[idx].img=_imgB64;
+  else{closeIM();return;}
+
+  if(isCh){
+    challengesRef.child('n'+source[idx].rank+'/img').set(source[idx].img||'').then(function(){
+      closeIM();
+      renderChallenges();
+      toast(_imgB64&&_imgB64!=='__rm__'?'Imagen guardada en Challenges ✓':'Imagen eliminada de Challenges','info');
+    }).catch(function(err){
+      console.error('save challenge image error:',err);
+      toast('Error al guardar imagen de Challenges','error');
+    });
+  }else{
+    saveFB();
+    closeIM();
+    toast(_imgB64&&_imgB64!=='__rm__'?'Imagen guardada ✓':'Imagen eliminada','info');
+  }
+}
 
 /* ══ ADMIN MODE ══ */
 function setAdmin(v){
@@ -3546,6 +3584,7 @@ function buildChallengesCard(d){
   var idb=d.id?'<span class="badge-id">#'+esc(d.id)+'</span>':'';
   var ab=d.atts?'<span class="badge-atts">'+esc(d.atts)+' ATTs</span>':'';
   var diffBar=d.diff?'<div class="diff-bar-wrap"><div class="diff-bar" style="'+diffBarStyle(d.diff)+'"></div></div>':'';
+  var cam=isAdmin?'<button class="thumb-cam-btn" onclick="openIM('+d.rank+',event,\'challenges\')">📷</button>':'';
   var ti=d.img
     ?'<div class="card-thumb-inner"><img src="'+ea(d.img)+'" alt="'+ea(d.name||'')+'"></div>'
     :'<div class="card-thumb-inner"><div class="card-thumb-empty"><svg width="34" height="23" viewBox="0 0 64 44" fill="none" opacity=".4"><rect x="1" y="1" width="62" height="42" rx="4" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="22" r="7" stroke="currentColor" stroke-width="1.5"/><circle cx="10.5" cy="11.5" r="1.5" fill="currentColor"/><circle cx="17.5" cy="11.5" r="1.5" fill="currentColor"/><path d="M10 16.5 Q14 19.5 18 16.5" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linecap="round"/></svg></div></div>';
@@ -3566,7 +3605,7 @@ function buildChallengesCard(d){
     '<div class="card-row">'+
       '<div class="rank-col"><div class="rank-num">'+d.rank+'</div><div class="rank-label">TOP</div></div>'+
       '<div class="card-info"><div class="card-name'+(emp?' empty':'')+'">'+( emp?'Slot #'+d.rank+' — Vacío':esc(d.name))+'</div><div class="card-meta">'+db2+idb+ab+'</div>'+(d.ver?'<div class="card-ver">Verificador: <span>'+esc(d.ver)+'</span>'+(d.creator?' &nbsp;·&nbsp; Creador: <span>'+esc(d.creator)+'</span>':'')+'</div>':(d.creator?'<div class="card-ver">Creador: <span>'+esc(d.creator)+'</span></div>':''))+diffBar+'</div>'+
-      '<div class="card-thumb">'+ti+'</div>'+
+      '<div class="card-thumb">'+ti+cam+'</div>'+
       '<div class="card-right"><div class="expand-arrow">▾</div></div>'+
     '</div><div class="card-detail">'+det+'</div></div>';
 }
@@ -4868,4 +4907,3 @@ document.addEventListener('keydown',function(e){
 
 </body>
 </html>
-
