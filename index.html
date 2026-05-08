@@ -1094,6 +1094,37 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 1.5rem calc(260px 
 .gl-modal-field textarea{resize:vertical;min-height:60px;}
 .gl-cover-preview{width:100%;height:100px;border-radius:8px;object-fit:cover;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--mu2);font-size:12px;margin-bottom:.5rem;overflow:hidden;}
 .gl-cover-preview img{width:100%;height:100%;object-fit:cover;}
+
+
+/* ══ PLAYERS VIEW CONTROLS / TABLE / GALLERY ══ */
+.player-table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.player-table{width:100%;border-collapse:collapse;font-size:12px;}
+.player-table th{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--mu2);font-weight:700;padding:.7rem .8rem;border-bottom:1px solid var(--border);text-align:left;background:var(--bg3);}
+.player-table td{padding:.65rem .8rem;border-bottom:1px solid var(--border);vertical-align:middle;}
+.player-table tr:hover td{background:rgba(255,255,255,.025);}
+.player-table tr:last-child td{border-bottom:none;}
+.player-rank{font-family:'Share Tech Mono',monospace;font-weight:900;color:var(--mu);}
+.player-mini{display:flex;align-items:center;gap:8px;}
+.player-mini .pav{width:28px;height:28px;font-size:12px;}
+.player-comps-inline{display:flex;gap:4px;flex-wrap:wrap;}
+.player-chip{font-size:10px;color:var(--mu);background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:2px 6px;white-space:nowrap;}
+.player-chip strong{color:var(--tx);}
+.player-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:11px;}
+.player-gallery-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem;cursor:pointer;transition:border-color .15s,transform .15s,box-shadow .15s;text-align:center;}
+.player-gallery-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:var(--shadow-card);}
+.player-gallery-card.p1{border-color:rgba(128,200,255,.32);}.player-gallery-card.p2{border-color:rgba(176,184,200,.22);}.player-gallery-card.p3{border-color:rgba(200,120,64,.22);}
+.pg-av{width:58px;height:58px;border-radius:50%;background:var(--bg3);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:var(--accent);overflow:hidden;margin:0 auto .65rem;}
+.pg-av img{width:100%;height:100%;object-fit:cover;}
+.pg-rank{font-family:'Share Tech Mono',monospace;font-weight:900;color:var(--accent);font-size:13px;margin-bottom:.25rem;}
+.pg-name{font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pg-points{font-family:'Share Tech Mono',monospace;color:var(--accent);font-size:12px;font-weight:700;margin-top:2px;}
+.pg-meta{font-size:10px;color:var(--mu);margin-top:.45rem;}
+.players-compact .pcrd{padding:.65rem .8rem;}
+.players-compact .ptop{margin-bottom:0;}
+.players-compact .pav{width:30px;height:30px;font-size:12px;}
+.players-compact .pcomps,.players-compact .medals-row,.players-compact .ban-btn,.players-compact .unban-btn{display:none!important;}
+@media(max-width:700px){.player-table-wrap{overflow-x:auto}.player-table{min-width:620px}.ph .lctrl{width:100%;}}
+
 </style>
 </head>
 <body>
@@ -1222,6 +1253,7 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 1.5rem calc(260px 
     <button class="tab-btn active" id="tab-list"        onclick="switchTab('list')">Lista</button>
     <button class="tab-btn"        id="tab-challenges"  onclick="switchTab('challenges')">Challenges</button>
     <button class="tab-btn"        id="tab-players"     onclick="switchTab('players')">Jugadores</button>
+    <button class="tab-btn"        id="tab-chplayers"   onclick="switchTab('chplayers')">Ch. Jugadores</button>
     <button class="tab-btn"        id="tab-suggestions" onclick="switchTab('suggestions')">Sugerencias</button>
     <button class="tab-btn"        id="tab-history"     onclick="switchTab('history')">Historial</button>
     <button class="tab-btn"        id="tab-stats"       onclick="switchTab('stats')">Stats</button>
@@ -1337,10 +1369,51 @@ footer{border-top:1px solid var(--border);padding:1.5rem 2rem 1.5rem calc(260px 
   <div class="pw">
     <div class="ph">
       <h2>Tabla de <span>Jugadores</span></h2>
-      <button class="av-btn" id="btn-add-victor" style="display:none" onclick="openAddVictor()"><span style="font-size:18px;line-height:1">+</span> Agregar Victor</button>
+      <div class="lctrl">
+        <div class="view-wrap" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <button class="vbtn active" id="pl-vbl" onclick="setPlayerView('list')">Lista</button>
+          <button class="vbtn" id="pl-vbc" onclick="setPlayerView('compact')">Compact</button>
+          <button class="vbtn" id="pl-vbt" onclick="setPlayerView('table')">Tabla</button>
+          <button class="vbtn" id="pl-vbg" onclick="setPlayerView('gallery')">🖼 Galería</button>
+          <select class="ppg-select" id="pl-ppg-select" onchange="setPlayerPPG(this.value)" title="Jugadores por página">
+            <option value="10">10 / pág</option>
+            <option value="20" selected>20 / pág</option>
+            <option value="50">50 / pág</option>
+            <option value="100">100 / pág</option>
+          </select>
+        </div>
+        <button class="av-btn" id="btn-add-victor" style="display:none" onclick="openAddVictor()"><span style="font-size:18px;line-height:1">+</span> Agregar Victor</button>
+      </div>
     </div>
     <input class="player-search" id="player-search" placeholder="🔍  Buscar jugador…" oninput="filterPlayers()" autocomplete="off">
     <div class="pgrid" id="pgrid"><div class="nop"><div style="font-size:2rem">🏆</div><p>Aún no hay victors.</p></div></div>
+    <div class="pagination" id="player-pagination"></div>
+  </div>
+</div>
+
+<div class="tab-page" id="page-chplayers">
+  <div class="pw">
+    <div class="ph">
+      <h2>Tabla de <span>Ch. Jugadores</span></h2>
+      <div class="lctrl">
+        <div class="view-wrap" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <button class="vbtn active" id="chp-vbl" onclick="setChPlayerView('list')">Lista</button>
+          <button class="vbtn" id="chp-vbc" onclick="setChPlayerView('compact')">Compact</button>
+          <button class="vbtn" id="chp-vbt" onclick="setChPlayerView('table')">Tabla</button>
+          <button class="vbtn" id="chp-vbg" onclick="setChPlayerView('gallery')">🖼 Galería</button>
+          <select class="ppg-select" id="chp-ppg-select" onchange="setChPlayerPPG(this.value)" title="Jugadores por página">
+            <option value="10">10 / pág</option>
+            <option value="20" selected>20 / pág</option>
+            <option value="50">50 / pág</option>
+            <option value="100">100 / pág</option>
+          </select>
+        </div>
+        <button class="av-btn" id="btn-ch-add-victor" style="display:none" onclick="openAddChallengeVictor()"><span style="font-size:18px;line-height:1">+</span> Agregar Ch. Victor</button>
+      </div>
+    </div>
+    <input class="player-search" id="ch-player-search" placeholder="🔍  Buscar challenge player…" oninput="filterChPlayers()" autocomplete="off">
+    <div class="pgrid" id="ch-pgrid"><div class="nop"><div style="font-size:2rem">🏆</div><p>Aún no hay victors de challenges.</p></div></div>
+    <div class="pagination" id="ch-player-pagination"></div>
   </div>
 </div>
 
@@ -4692,6 +4765,182 @@ document.addEventListener('keydown',function(e){
     ['ov-gl-create','ov-gl-addlevel','ov-gl-suggest','ov-gl-join'].forEach(function(id){var el=document.getElementById(id);if(el)el.classList.remove('open');});
   }
 });
+
+/* ══ PATCH: PLAYER LIST MODES + CHALLENGE PLAYERS ══ */
+var playerVM=localStorage.getItem('shittylist-player-vm')||'list';
+var playerPPG=parseInt(localStorage.getItem('shittylist-player-ppg')||'20')||20;
+var playerPg=1;
+var chPlayerVM=localStorage.getItem('shittylist-chplayer-vm')||'list';
+var chPlayerPPG=parseInt(localStorage.getItem('shittylist-chplayer-ppg')||'20')||20;
+var chPlayerPg=1;
+var _chPlayerFilter='';
+var _victorMode='list';
+(function(){
+  var sel=document.getElementById('pl-ppg-select');if(sel)sel.value=String(playerPPG);
+  var csel=document.getElementById('chp-ppg-select');if(csel)csel.value=String(chPlayerPPG);
+  setTimeout(function(){syncPlayerViewButtons('pl',playerVM);syncPlayerViewButtons('chp',chPlayerVM);},0);
+})();
+function syncPlayerViewButtons(prefix,mode){
+  ['vbl','vbc','vbt','vbg'].forEach(function(suf){var el=document.getElementById(prefix+'-'+suf);if(el)el.classList.remove('active');});
+  var map={list:'vbl',compact:'vbc',table:'vbt',gallery:'vbg'};
+  var el=document.getElementById(prefix+'-'+map[mode]);if(el)el.classList.add('active');
+}
+function setPlayerView(mode){playerVM=mode;localStorage.setItem('shittylist-player-vm',mode);syncPlayerViewButtons('pl',mode);renderPlayers();}
+function setChPlayerView(mode){chPlayerVM=mode;localStorage.setItem('shittylist-chplayer-vm',mode);syncPlayerViewButtons('chp',mode);renderChPlayers();}
+function setPlayerPPG(val){playerPPG=parseInt(val)||20;playerPg=1;localStorage.setItem('shittylist-player-ppg',playerPPG);renderPlayers();toast(playerPPG+' jugadores por página','info');}
+function setChPlayerPPG(val){chPlayerPPG=parseInt(val)||20;chPlayerPg=1;localStorage.setItem('shittylist-chplayer-ppg',chPlayerPPG);renderChPlayers();toast(chPlayerPPG+' jugadores por página','info');}
+function filterPlayers(){_playerFilter=(document.getElementById('player-search').value||'').toLowerCase();playerPg=1;renderPlayers();}
+function filterChPlayers(){_chPlayerFilter=(document.getElementById('ch-player-search').value||'').toLowerCase();chPlayerPg=1;renderChPlayers();}
+function calcScoresFrom(sourceData){
+  var sc={};
+  (sourceData||[]).forEach(function(d){
+    var all=[];
+    if(d.ver&&String(d.ver).trim())all.push({name:String(d.ver).trim(),field:'ver'});
+    if(d.v1&&String(d.v1).trim())all.push({name:String(d.v1).trim(),field:'v1'});
+    if(d.v2&&String(d.v2).trim())all.push({name:String(d.v2).trim(),field:'v2'});
+    if(d.v3&&String(d.v3).trim())all.push({name:String(d.v3).trim(),field:'v3'});
+    var seen={};
+    all.forEach(function(p){
+      if(seen[p.name])return;seen[p.name]=true;
+      if(!sc[p.name])sc[p.name]={name:p.name,total:0,comps:[]};
+      var pt=pts(d.rank,d.diff);sc[p.name].total+=pt;
+      var role=p.field==='ver'?'Verificador':p.field==='v1'?'1° Beatero':p.field==='v2'?'2° Beatero':'3° Beatero';
+      sc[p.name].comps.push({lvl:d.name||'Slot #'+d.rank,rank:d.rank,pts:pt,field:p.field,role:role,diff:d.diff});
+    });
+  });
+  Object.keys(ALL_USERS||{}).forEach(function(uid){
+    var u=ALL_USERS[uid];if(!u||!u.username)return;
+    if(!sc[u.username])sc[u.username]={name:u.username,total:0,comps:[]};
+    sc[u.username].banned=!!u.banned;sc[u.username].uid=uid;
+  });
+  return Object.values(sc).sort(function(a,b){if(a.banned&&!b.banned)return 1;if(!a.banned&&b.banned)return-1;return b.total-a.total;});
+}
+function calcScores(){return calcScoresFrom(DATA);}
+function playerAvatarHTML(p){
+  var uid=p.uid||Object.keys(ALL_USERS).find(function(k){return ALL_USERS[k]&&ALL_USERS[k].username===p.name;});
+  var udata=uid?ALL_USERS[uid]:null;
+  if(udata&&udata.photoURL)return '<img src="'+ea(udata.photoURL)+'" alt="'+ea(p.name)+'">';
+  return esc((p.name||'?').charAt(0).toUpperCase());
+}
+function renderPlayers(){
+  renderPlayerBoard({source:DATA,filter:_playerFilter,gridId:'pgrid',pagId:'player-pagination',vm:playerVM,pg:playerPg,ppg:playerPPG,empty:'Aún no hay jugadores.',go:'goPlayerP',challenge:false});
+}
+function renderChPlayers(){
+  renderPlayerBoard({source:CHALLENGES_DATA,filter:_chPlayerFilter,gridId:'ch-pgrid',pagId:'ch-player-pagination',vm:chPlayerVM,pg:chPlayerPg,ppg:chPlayerPPG,empty:'Aún no hay jugadores de challenges.',go:'goChPlayerP',challenge:true});
+}
+function renderPlayerBoard(cfg){
+  var grid=document.getElementById(cfg.gridId),pag=document.getElementById(cfg.pagId);if(!grid)return;
+  var players=calcScoresFrom(cfg.source);
+  if(cfg.filter)players=players.filter(function(p){return p.name.toLowerCase().includes(cfg.filter);});
+  var ranked=players.filter(function(p){return p.total>0&&!p.banned;});
+  var zeros=players.filter(function(p){return p.total===0&&!p.banned;});
+  var banned=players.filter(function(p){return p.banned;});
+  var visible=ranked.concat(zeros).concat(isAdmin?banned:[]);
+  if(!visible.length){grid.className='pgrid';grid.innerHTML='<div class="nop"><div style="font-size:2rem">🏆</div><p>'+(cfg.filter?'Sin resultados.':cfg.empty)+'</p></div>';if(pag)pag.innerHTML='';return;}
+  var start=(cfg.pg-1)*cfg.ppg,page=visible.slice(start,start+cfg.ppg);
+  if(cfg.vm==='table'){
+    grid.className='player-table-wrap';
+    grid.innerHTML='<table class="player-table"><thead><tr><th>#</th><th>Jugador</th><th>Puntos</th><th>Completions</th><th>Top completions</th></tr></thead><tbody>'+page.map(function(p){return buildPlayerTableRow(p,ranked,cfg.challenge);}).join('')+'</tbody></table>';
+  }else if(cfg.vm==='gallery'){
+    grid.className='player-gallery';
+    grid.innerHTML=page.map(function(p){return buildPlayerGalleryCard(p,ranked,cfg.challenge);}).join('');
+  }else{
+    grid.className='pgrid'+(cfg.vm==='compact'?' players-compact':'');
+    var html='';
+    page.forEach(function(p){
+      var rp=ranked.findIndex(function(x){return x.name===p.name;})+1;
+      html+=buildPlayerCardFor(p,rp||null,cfg.challenge);
+    });
+    grid.innerHTML=html;
+  }
+  renderPlayerPagination(visible.length,cfg.pg,cfg.ppg,cfg.pagId,cfg.go);
+}
+function renderPlayerPagination(total,pgNow,ppg,pagId,goFn){
+  var el=document.getElementById(pagId);if(!el)return;
+  var tot=Math.ceil(total/ppg);if(tot<=1){el.innerHTML='';return;}
+  var h='';if(pgNow>1)h+='<button class="page-btn" onclick="'+goFn+'('+(pgNow-1)+')">◂</button>';
+  for(var i=1;i<=tot;i++)h+='<button class="page-btn'+(i===pgNow?' active':'')+'" onclick="'+goFn+'('+i+')">'+i+'</button>';
+  if(pgNow<tot)h+='<button class="page-btn" onclick="'+goFn+'('+(pgNow+1)+')">▸</button>';
+  el.innerHTML=h;
+}
+function goPlayerP(n){playerPg=n;renderPlayers();window.scrollTo({top:0,behavior:'smooth'});}
+function goChPlayerP(n){chPlayerPg=n;renderChPlayers();window.scrollTo({top:0,behavior:'smooth'});}
+function buildPlayerCardFor(p,rankPos,challenge){
+  var cls=rankPos&&rankPos<=3?'p'+rankPos:'';if(p.banned)cls='banned';
+  var comps=p.comps.map(function(c){
+    var del=isAdmin?'<button class="pcdel" onclick="'+(challenge?'removeChallengeVictor':'removeVictor')+'(\''+ea(c.field)+'\','+c.rank+',event)">✕</button>':'';
+    return'<div class="pcrow"><span class="pclvl">Top '+c.rank+' — '+esc(c.lvl)+'</span><span style="font-size:10px;color:var(--mu);opacity:.6">('+esc(c.role)+')</span><span class="pcpts">+'+c.pts+'</span>'+del+'</div>';
+  }).join('');
+  var uid=p.uid||Object.keys(ALL_USERS).find(function(k){return ALL_USERS[k]&&ALL_USERS[k].username===p.name;});
+  var banBtn='';
+  if(isAdmin&&p.name.toLowerCase()!==ADMIN_USER.toLowerCase()&&uid){banBtn=p.banned?'<button class="unban-btn" onclick="toggleBan(\''+ea(uid)+'\',\''+ea(p.name)+'\',false,event)">✓ Desbanear</button>':'<button class="ban-btn" onclick="toggleBan(\''+ea(uid)+'\',\''+ea(p.name)+'\',true,event)">🚫 Banear</button>';}
+  var medals=getMedals(p);var medH=medals.length?'<div class="medals-row" style="margin-top:.4rem">'+medals.map(function(m){return'<span class="medal '+m.cls+'">'+m.icon+' '+m.label+'</span>';}).join('')+'</div>':'';
+  return'<div class="pcrd '+cls+'" onclick="openPlayerProfileBySource(\''+ea(p.name)+'\','+(challenge?'true':'false')+')">'+
+    '<div class="ptop">'+(rankPos?'<div class="pnum">#'+rankPos+'</div>':'<div class="pnum" style="color:var(--mu2)">—</div>')+
+    '<div class="pav">'+playerAvatarHTML(p)+'</div><div><div class="pnm">'+esc(p.name)+(p.banned?'<span class="ban-badge">Baneado</span>':'')+'</div><div class="ppts"><em>'+p.total+'</em> pts</div></div></div>'+medH+(comps?'<div class="pcomps">'+comps+'</div>':'')+banBtn+'</div>';
+}
+function buildPlayerTableRow(p,ranked,challenge){
+  var rp=ranked.findIndex(function(x){return x.name===p.name;})+1;
+  var comps=p.comps.slice(0,4).map(function(c){return'<span class="player-chip"><strong>#'+c.rank+'</strong> '+esc(c.role)+' +'+c.pts+'</span>';}).join('');
+  return'<tr onclick="openPlayerProfileBySource(\''+ea(p.name)+'\','+(challenge?'true':'false')+')" style="cursor:pointer">'+
+    '<td class="player-rank">'+(rp?'#'+rp:'—')+'</td><td><div class="player-mini"><div class="pav">'+playerAvatarHTML(p)+'</div><strong>'+esc(p.name)+'</strong>'+(p.banned?'<span class="ban-badge">Baneado</span>':'')+'</div></td>'+ 
+    '<td style="color:var(--accent);font-family:Share Tech Mono,monospace;font-weight:900">'+p.total+'</td><td>'+p.comps.length+'</td><td><div class="player-comps-inline">'+(comps||'<span style="color:var(--mu2)">—</span>')+'</div></td></tr>';
+}
+function buildPlayerGalleryCard(p,ranked,challenge){
+  var rp=ranked.findIndex(function(x){return x.name===p.name;})+1;var cls=rp&&rp<=3?'p'+rp:'';
+  return'<div class="player-gallery-card '+cls+'" onclick="openPlayerProfileBySource(\''+ea(p.name)+'\','+(challenge?'true':'false')+')"><div class="pg-av">'+playerAvatarHTML(p)+'</div><div class="pg-rank">'+(rp?'#'+rp:'—')+'</div><div class="pg-name">'+esc(p.name)+'</div><div class="pg-points">'+p.total+' pts</div><div class="pg-meta">'+p.comps.length+' completions</div></div>';
+}
+function openPlayerProfileBySource(uname,challenge){
+  if(!challenge&&cUD&&cUD.username===uname){switchTab('profile');return;}
+  if(!challenge){openPlayerProfile(uname);return;}
+  openChallengePlayerProfile(uname);
+}
+function openChallengePlayerProfile(uname){
+  var scores=calcScoresFrom(CHALLENGES_DATA),player=scores.find(function(p){return p.name===uname;});if(!player)return;
+  var uid=player.uid||Object.keys(ALL_USERS).find(function(k){return ALL_USERS[k]&&ALL_USERS[k].username===uname;});var udata=uid?ALL_USERS[uid]:{};
+  var photo=udata.photoURL||'',bio=udata.bio||'Sin bio todavía.',joined=udata.createdAt?new Date(udata.createdAt).toLocaleDateString('es-AR',{day:'numeric',month:'long',year:'numeric'}):'—';
+  var avH=photo?'<img src="'+esc(photo)+'" alt="">':esc(uname.charAt(0).toUpperCase());var rankPos=scores.filter(function(p){return!p.banned;}).findIndex(function(p){return p.name===uname;})+1;
+  var firstVics=player.comps.filter(function(c){return c.field==='v1';}).length;
+  var compsH=player.comps.length?player.comps.map(function(c){return'<div class="prcc"><div class="prcc-rank">#'+c.rank+'</div><div class="prcc-name">'+esc(c.lvl)+'</div><span class="prcc-role">'+esc(c.role)+'</span><span class="prcc-pts">+'+c.pts+'</span></div>';}).join(''):'<div style="color:var(--mu);font-size:13px;padding:.5rem 0">Sin completions.</div>';
+  var html='<div class="pr-card"><div class="pr-banner"><div class="pr-banner-inner"></div></div><div class="pr-head"><div class="pr-av">'+avH+'</div><div class="pr-info"><div class="pr-username">'+esc(uname)+' <span class="pr-admin-tag">Challenges</span></div><div class="pr-joined">📅 Miembro desde '+joined+'</div><div class="pr-bio">'+esc(bio)+'</div></div></div><div class="pr-stats-bar"><div class="pr-stat-item"><div class="pr-stat-n">'+player.total+'</div><div class="pr-stat-l">Ch. Puntos</div></div><div class="pr-stat-item"><div class="pr-stat-n">'+player.comps.length+'</div><div class="pr-stat-l">Ch. Completions</div></div><div class="pr-stat-item"><div class="pr-stat-n">'+(rankPos>0?'#'+rankPos:'—')+'</div><div class="pr-stat-l">Ch. Ranking</div></div><div class="pr-stat-item"><div class="pr-stat-n">'+firstVics+'</div><div class="pr-stat-l">1° Beateos</div></div></div></div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:1.1rem;margin-bottom:.6rem"><div class="pr-comps-title">Challenge completions</div></div><div class="pr-comps">'+compsH+'</div>';
+  document.getElementById('pp-title').textContent=uname+' — Challenges';document.getElementById('pp-body').innerHTML=html;document.getElementById('ov-player-profile').classList.add('open');
+}
+function saveChallengesFB(){
+  if(!isAdmin){toast('No tenés permisos de admin','error');return;}
+  var o={};CHALLENGES_DATA.forEach(function(d){o['n'+d.rank]=d;});
+  return challengesRef.set(o).catch(function(err){toast('Error al guardar challenges: '+((err&&err.message)||'desconocido'),'error');});
+}
+function openAddVictor(){
+  if(!isAdmin)return;_victorMode='list';var sel=document.getElementById('av-level');
+  sel.innerHTML=DATA.map(function(d){return'<option value="'+d.rank+'">Top '+d.rank+(d.name?' — '+esc(d.name):'')+'</option>';}).join('');
+  document.getElementById('av-name').value='';document.getElementById('ov-victor').classList.add('open');setTimeout(function(){document.getElementById('av-name').focus();},50);
+}
+function openAddChallengeVictor(){
+  if(!isAdmin)return;_victorMode='challenges';var sel=document.getElementById('av-level');
+  sel.innerHTML=CHALLENGES_DATA.map(function(d){return'<option value="'+d.rank+'">Ch. Top '+d.rank+(d.name?' — '+esc(d.name):'')+'</option>';}).join('');
+  document.getElementById('av-name').value='';document.getElementById('ov-victor').classList.add('open');setTimeout(function(){document.getElementById('av-name').focus();},50);
+}
+function submitAddVictor(){
+  if(!isAdmin)return;var rank=parseInt(document.getElementById('av-level').value),slot=document.getElementById('av-slot').value,name=document.getElementById('av-name').value.trim();if(!name){toast('Escribí un nombre','error');return;}
+  if(_victorMode==='challenges'){
+    var ci=CHALLENGES_DATA.findIndex(function(d){return d.rank===rank;});if(ci===-1)return;CHALLENGES_DATA[ci][slot]=name;saveChallengesFB().then(function(){closeAddVictor();renderChPlayers();renderChallenges();toast(name+' agregado a Ch. Jugadores ✓');});
+  }else{
+    var idx=DATA.findIndex(function(d){return d.rank===rank;});if(idx===-1)return;DATA[idx][slot]=name;saveFB();closeAddVictor();renderPlayers();toast(name+' agregado ✓');
+  }
+}
+function removeChallengeVictor(field,rank,ev){
+  if(!isAdmin)return;ev.stopPropagation();var idx=CHALLENGES_DATA.findIndex(function(d){return d.rank===rank;});if(idx===-1)return;
+  openDlg({title:'Quitar challenge victor',type:'confirm',cm:'¿Quitar a <strong>'+esc(CHALLENGES_DATA[idx][field]||'')+'</strong> de Challenges?',ok:'Quitar',cb:function(){CHALLENGES_DATA[idx][field]='';saveChallengesFB().then(function(){renderChPlayers();renderChallenges();toast('Challenge victor eliminado','info');});}});
+}
+(function(){
+  var oldSwitch=switchTab;
+  switchTab=function(name){oldSwitch(name);if(name==='chplayers')renderChPlayers();};
+  var oldSetAdmin=setAdmin;
+  setAdmin=function(v){oldSetAdmin(v);var b=document.getElementById('btn-ch-add-victor');if(b)b.style.display=v?'flex':'none';var cp=document.getElementById('page-chplayers');if(cp&&cp.classList.contains('active'))renderChPlayers();};
+  usersRef.on('value',function(){var cp=document.getElementById('page-chplayers');if(cp&&cp.classList.contains('active'))renderChPlayers();});
+  challengesRef.on('value',function(){var cp=document.getElementById('page-chplayers');if(cp&&cp.classList.contains('active'))renderChPlayers();});
+})();
+
 </script>
 
 
